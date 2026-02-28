@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "WebFetch(domain:www.e-stat.go.jp)",
-      "WebFetch(domain:docs.evidence.dev)"
+      "WebFetch(domain:docs.evidence.dev)",
+      "Bash(source .env)",
+      "Bash(export ESTAT_API_APPID)",
+      "Bash(uv run python Estat/search_stats.py *)"
     ]
   }
 }

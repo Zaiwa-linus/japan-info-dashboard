@@ -2,7 +2,10 @@
 
 使い方:
   python Estat/download_data.py 0003317114
-  python Estat/download_data.py 0003317114 -o data/tourism_spending.csv
+  python Estat/download_data.py 0003317114 -o data/custom_dir/data.csv
+
+デフォルトでは data/{統計表ID}/ ディレクトリを作成し、
+その中に {統計表ID}.csv と description.md を保存する。
 """
 
 import argparse
@@ -41,7 +44,7 @@ def api_get(url: str) -> dict:
 
 
 def fetch_meta(app_id: str, stats_data_id: str) -> dict:
-    """メタ情報を取得し、コード→名称のマッピングを構築する。"""
+    """メタ情報を取得し、コード→名称のマッピングとテーブル情報を返す。"""
     params = {
         "appId": app_id,
         "lang": "J",
@@ -55,11 +58,14 @@ def fetch_meta(app_id: str, stats_data_id: str) -> dict:
         print(f"メタ情報取得エラー: {root.get('RESULT', {}).get('ERROR_MSG')}", file=sys.stderr)
         sys.exit(1)
 
+    metadata = root.get("METADATA_INF", {})
+    table_inf = metadata.get("TABLE_INF", {})
+
     # 分類ID → {コード → 名称} のマッピングを作成
     code_map = {}  # {"tab": {"100": "回答数", ...}, "area": {"00000": "全体", ...}}
     class_names = {}  # {"tab": "表章項目", "area": "国籍", ...}
 
-    class_objs = root.get("METADATA_INF", {}).get("CLASS_INF", {}).get("CLASS_OBJ", [])
+    class_objs = metadata.get("CLASS_INF", {}).get("CLASS_OBJ", [])
     if not isinstance(class_objs, list):
         class_objs = [class_objs]
 
@@ -73,7 +79,52 @@ def fetch_meta(app_id: str, stats_data_id: str) -> dict:
         for cls in classes:
             code_map[obj_id][cls.get("@code", "")] = cls.get("@name", "")
 
-    return code_map, class_names
+    return code_map, class_names, table_inf
+
+
+def _get_text(val) -> str:
+    """APIレスポンスの値からテキストを取得する（dict or str対応）。"""
+    if isinstance(val, dict):
+        return val.get("$", str(val))
+    return str(val) if val else ""
+
+
+def write_description(table_inf: dict, output_dir: str) -> None:
+    """メタ情報からdescription.mdを生成する。"""
+    stat_name = _get_text(table_inf.get("STAT_NAME", ""))
+    title = _get_text(table_inf.get("TITLE", ""))
+    gov_org = _get_text(table_inf.get("GOV_ORG", ""))
+    stats_id = table_inf.get("@id", "")
+    cycle = table_inf.get("CYCLE", "")
+    survey_date = table_inf.get("SURVEY_DATE", "")
+    open_date = table_inf.get("OPEN_DATE", "")
+    updated_date = table_inf.get("UPDATED_DATE", "")
+    total_number = table_inf.get("OVERALL_TOTAL_NUMBER", "")
+    stat_code = _get_text(table_inf.get("STAT_NAME", {}).get("@code", "")) if isinstance(table_inf.get("STAT_NAME"), dict) else ""
+
+    lines = [
+        f"# {title}",
+        "",
+        f"- **統計表ID**: {stats_id}",
+        f"- **統計名**: {stat_name}",
+        f"- **提供機関**: {gov_org}",
+    ]
+    if cycle:
+        lines.append(f"- **周期**: {cycle}")
+    if survey_date:
+        lines.append(f"- **調査日**: {survey_date}")
+    if open_date:
+        lines.append(f"- **公開日**: {open_date}")
+    if updated_date:
+        lines.append(f"- **更新日**: {updated_date}")
+    if total_number:
+        lines.append(f"- **データ件数**: {total_number}")
+    lines.append("")
+
+    desc_path = os.path.join(output_dir, "description.md")
+    with open(desc_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines))
+    print(f"保存しました: {desc_path}", file=sys.stderr)
 
 
 def fetch_stats_data(app_id: str, stats_data_id: str) -> list[dict]:
@@ -169,13 +220,19 @@ def main():
 
     output = args.output
     if not output:
-        output = f"data/{stats_data_id}.csv"
+        output_dir = f"data/{stats_data_id}"
+        output = f"{output_dir}/{stats_data_id}.csv"
+    else:
+        output_dir = os.path.dirname(output)
 
     # 出力ディレクトリ作成
-    os.makedirs(os.path.dirname(output), exist_ok=True)
+    os.makedirs(output_dir, exist_ok=True)
 
     print(f"メタ情報を取得中...", file=sys.stderr)
-    code_map, class_names = fetch_meta(app_id, stats_data_id)
+    code_map, class_names, table_inf = fetch_meta(app_id, stats_data_id)
+
+    # description.md を生成
+    write_description(table_inf, output_dir)
 
     print(f"統計データを取得中...", file=sys.stderr)
     values = fetch_stats_data(app_id, stats_data_id)
