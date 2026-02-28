@@ -89,7 +89,7 @@ def _get_text(val) -> str:
     return str(val) if val else ""
 
 
-def write_description(table_inf: dict, output_dir: str) -> None:
+def write_description(table_inf: dict, code_map: dict, class_names: dict, output_dir: str) -> None:
     """メタ情報からdescription.mdを生成する。"""
     stat_name = _get_text(table_inf.get("STAT_NAME", ""))
     title = _get_text(table_inf.get("TITLE", ""))
@@ -100,15 +100,33 @@ def write_description(table_inf: dict, output_dir: str) -> None:
     open_date = table_inf.get("OPEN_DATE", "")
     updated_date = table_inf.get("UPDATED_DATE", "")
     total_number = table_inf.get("OVERALL_TOTAL_NUMBER", "")
-    stat_code = _get_text(table_inf.get("STAT_NAME", {}).get("@code", "")) if isinstance(table_inf.get("STAT_NAME"), dict) else ""
+    stat_code = ""
+    if isinstance(table_inf.get("STAT_NAME"), dict):
+        stat_code = table_inf["STAT_NAME"].get("@code", "")
+    title_no = table_inf.get("TITLE_NO", "")
+    small_area = table_inf.get("SMALL_AREA", "")
+    main_category = _get_text(table_inf.get("MAIN_CATEGORY", ""))
+    sub_category = _get_text(table_inf.get("SUB_CATEGORY", ""))
+    description = _get_text(table_inf.get("STATISTICS_NAME_SPEC", {}).get("DESCRIPTION", "")) if isinstance(table_inf.get("STATISTICS_NAME_SPEC"), dict) else ""
 
+    # 基本情報
     lines = [
         f"# {title}",
         "",
+        "## 基本情報",
+        "",
         f"- **統計表ID**: {stats_id}",
         f"- **統計名**: {stat_name}",
-        f"- **提供機関**: {gov_org}",
     ]
+    if stat_code:
+        lines.append(f"- **統計コード**: {stat_code}")
+    lines.append(f"- **提供機関**: {gov_org}")
+    if main_category:
+        lines.append(f"- **大分類**: {main_category}")
+    if sub_category:
+        lines.append(f"- **小分類**: {sub_category}")
+    if title_no:
+        lines.append(f"- **表番号**: {title_no}")
     if cycle:
         lines.append(f"- **周期**: {cycle}")
     if survey_date:
@@ -119,7 +137,55 @@ def write_description(table_inf: dict, output_dir: str) -> None:
         lines.append(f"- **更新日**: {updated_date}")
     if total_number:
         lines.append(f"- **データ件数**: {total_number}")
+    if small_area and str(small_area) == "1":
+        lines.append(f"- **小地域データ**: あり")
+    if description:
+        lines.append(f"- **説明**: {description}")
     lines.append("")
+
+    # CSVカラム情報
+    lines.append("## CSVカラム構成")
+    lines.append("")
+    lines.append("| # | カラム名 | 説明 |")
+    lines.append("|---|---------|------|")
+    col_num = 1
+    for dim_id in code_map:
+        name = class_names.get(dim_id, dim_id)
+        lines.append(f"| {col_num} | `{name}_code` | {name}のコード |")
+        col_num += 1
+        lines.append(f"| {col_num} | `{name}` | {name}の名称 |")
+        col_num += 1
+    lines.append(f"| {col_num} | `unit` | 単位 |")
+    col_num += 1
+    lines.append(f"| {col_num} | `value` | 値 |")
+    lines.append("")
+
+    # 分類情報の詳細
+    lines.append("## 分類情報")
+    lines.append("")
+    for dim_id, codes in code_map.items():
+        name = class_names.get(dim_id, dim_id)
+        lines.append(f"### {name} (`{dim_id}`)")
+        lines.append("")
+        count = len(codes)
+        if count <= 30:
+            lines.append("| コード | 名称 |")
+            lines.append("|--------|------|")
+            for code, label in codes.items():
+                lines.append(f"| `{code}` | {label} |")
+        else:
+            # 件数が多い場合は先頭・末尾のみ表示
+            items = list(codes.items())
+            lines.append(f"全{count}件（先頭10件・末尾5件を表示）")
+            lines.append("")
+            lines.append("| コード | 名称 |")
+            lines.append("|--------|------|")
+            for code, label in items[:10]:
+                lines.append(f"| `{code}` | {label} |")
+            lines.append("| ... | ... |")
+            for code, label in items[-5:]:
+                lines.append(f"| `{code}` | {label} |")
+        lines.append("")
 
     desc_path = os.path.join(output_dir, "description.md")
     with open(desc_path, "w", encoding="utf-8") as f:
@@ -232,7 +298,7 @@ def main():
     code_map, class_names, table_inf = fetch_meta(app_id, stats_data_id)
 
     # description.md を生成
-    write_description(table_inf, output_dir)
+    write_description(table_inf, code_map, class_names, output_dir)
 
     print(f"統計データを取得中...", file=sys.stderr)
     values = fetch_stats_data(app_id, stats_data_id)

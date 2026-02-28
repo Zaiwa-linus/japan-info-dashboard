@@ -93,14 +93,6 @@ uv run python Estat/download_data.py 0003317252 -o data/0003317252/population_by
 - メタ情報から分類コード→名称のマッピングを自動解決
 - 出力CSVのカラム: `{分類名}_code`, `{分類名}`, ..., `unit`, `value`
 
-## ダウンロード後の作業フロー
-
-1. CSVを `data/{統計表ID}/` に配置（download_data.py のデフォルト出力先）
-2. dbt の `models/staging/sources.yml` にソース定義を追加
-3. `models/staging/stg_*.sql` でクレンジング（型変換、カラム名統一）
-4. 必要に応じて `models/intermediate/` で中間処理
-5. `models/marts/` で集計し、Evidence から参照
-
 ## e-Stat API 仕様の要点
 
 - ベースURL: `https://api.e-stat.go.jp/rest/3.0/app/json/{機能名}`
