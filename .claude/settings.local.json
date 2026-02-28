@@ -5,7 +5,9 @@
       "WebFetch(domain:docs.evidence.dev)",
       "Bash(source .env)",
       "Bash(export ESTAT_API_APPID)",
-      "Bash(uv run python Estat/search_stats.py *)"
+      "Bash(uv run python Estat/search_stats.py *)",
+      "Bash(uv run python Estat/get_meta.py *)",
+      "Bash(uv run python Estat/download_data.py *)"
     ]
   }
 }
