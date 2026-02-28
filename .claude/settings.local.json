@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:www.e-stat.go.jp)"
+      "WebFetch(domain:www.e-stat.go.jp)",
+      "WebFetch(domain:docs.evidence.dev)"
     ]
   }
 }
