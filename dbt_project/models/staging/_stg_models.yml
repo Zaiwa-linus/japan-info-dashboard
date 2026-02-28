@@ -1,0 +1,110 @@
+version: 2
+
+models:
+  - name: stg_economic_base
+    description: "社会・人口統計体系 - Ｃ 経済基盤（都道府県別）。都道府県ごとの県民所得・事業所数などの経済基盤指標を整形したステージングモデル。"
+    columns:
+      - name: observation_code
+        description: "観測値の分類コード"
+      - name: observation
+        description: "観測値の分類名称"
+      - name: indicator_code
+        description: "経済基盤指標の分類コード"
+      - name: indicator_name
+        description: "経済基盤指標の名称（例: 県民所得、事業所数）"
+      - name: area_code
+        description: "都道府県コード"
+      - name: area_name
+        description: "都道府県名"
+      - name: year_code
+        description: "調査年コード"
+      - name: year_name
+        description: "調査年の表示名称"
+      - name: unit
+        description: "値の単位（例: 百万円、事業所）"
+      - name: value
+        description: "指標の数値（double型にキャスト済み）"
+
+  - name: stg_household
+    description: "社会・人口統計体系 - Ｌ 家計（都道府県別）。都道府県ごとの消費支出・収入などの家計関連指標を整形したステージングモデル。"
+    columns:
+      - name: observation_code
+        description: "観測値の分類コード"
+      - name: observation
+        description: "観測値の分類名称"
+      - name: indicator_code
+        description: "家計指標の分類コード"
+      - name: indicator_name
+        description: "家計指標の名称（例: 消費支出、実収入）"
+      - name: area_code
+        description: "都道府県コード"
+      - name: area_name
+        description: "都道府県名"
+      - name: year_code
+        description: "調査年コード"
+      - name: year_name
+        description: "調査年の表示名称"
+      - name: unit
+        description: "値の単位（例: 円、%）"
+      - name: value
+        description: "指標の数値（double型にキャスト済み）"
+
+  - name: stg_savings_debt
+    description: "家計調査 - 貯蓄・負債（都市階級・地方・県庁所在市別）。世帯の貯蓄・負債に関する統計を整形したステージングモデル。"
+    columns:
+      - name: item_code
+        description: "表章項目コード（金額・構成比等の区分）"
+      - name: item_name
+        description: "表章項目名称"
+      - name: category_code
+        description: "貯蓄・負債の分類コード"
+      - name: category_name
+        description: "貯蓄・負債の分類名称（例: 貯蓄現在高、負債現在高）"
+      - name: household_type_code
+        description: "世帯区分コード（二人以上の世帯等）"
+      - name: household_type_name
+        description: "世帯区分の名称"
+      - name: area_code
+        description: "地域区分コード（都市階級・地方・県庁所在市）"
+      - name: area_name
+        description: "地域区分の名称"
+      - name: year_code
+        description: "年次コード"
+      - name: year_name
+        description: "年次の表示名称"
+      - name: unit
+        description: "値の単位（例: 万円、%）"
+      - name: value
+        description: "指標の数値（double型にキャスト済み）"
+
+  - name: stg_population
+    description: "人口推計 - 都道府県・男女別人口。都道府県ごとの総人口・男女別人口および人口増減を整形したステージングモデル。"
+    columns:
+      - name: item_code
+        description: "表章項目コード（人口・人口増減率等の区分）"
+      - name: item_name
+        description: "表章項目名称"
+      - name: population_type_code
+        description: "人口及び人口増減の分類コード"
+      - name: population_type_name
+        description: "人口及び人口増減の分類名称（例: 総人口、日本人人口）"
+      - name: gender_code
+        description: "男女別コード"
+      - name: gender_name
+        description: "男女別の名称（男、女、男女計）"
+      - name: population_category_code
+        description: "人口区分コード（総数・年齢別等）"
+      - name: population_category_name
+        description: "人口区分の名称"
+      - name: area_code
+        description: "全国・都道府県コード"
+      - name: area_name
+        description: "全国・都道府県名"
+      - name: year_code
+        description: "年次コード"
+      - name: year_name
+        description: "年次の表示名称"
+      - name: unit
+        description: "値の単位（例: 1000人、%）"
+      - name: value
+        description: "指標の数値（double型にキャスト済み）"
