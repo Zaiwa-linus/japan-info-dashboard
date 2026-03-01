@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: int_population
+    description: "都道府県別・男女別の総人口（全国を除く）。2023年・2024年の10月1日時点データ。"
+    columns:
+      - name: item_code
+        description: "表章項目コード"
+      - name: item_name
+        description: "表章項目名称"
+      - name: population_type_code
+        description: "人口及び人口増減の分類コード"
+      - name: population_type_name
+        description: "人口及び人口増減の分類名称"
+      - name: gender_code
+        description: "男女別コード"
+      - name: gender_name
+        description: "男女別（男、女）"
+      - name: population_category_code
+        description: "人口区分コード"
+      - name: population_category_name
+        description: "人口区分の名称"
+      - name: area_code
+        description: "都道府県コード"
+      - name: area_name
+        description: "都道府県名"
+      - name: year_code
+        description: "年次コード"
+      - name: year_name
+        description: "年次の表示名称（2023年10月1日現在、2024年10月1日現在）"
+      - name: unit
+        description: "値の単位"
+      - name: value
+        description: "人口（人）"

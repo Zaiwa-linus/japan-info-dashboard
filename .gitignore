@@ -2,3 +2,5 @@ venv/
 .venv/
 .env
 CLAUDE.md
+logs/
+.vscode/

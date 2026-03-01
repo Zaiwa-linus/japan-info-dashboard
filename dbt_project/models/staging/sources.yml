@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+  - name: estat
+    description: "e-Stat APIから取得した統計データ（CSVファイル）"
+    meta:
+      external_location: "../data/{name}/{name}.csv"
+    tables:
+      - name: "0000010103"
+        description: "社会・人口統計体系 - Ｃ 経済基盤（都道府県別）"
+      - name: "0000010112"
+        description: "社会・人口統計体系 - Ｌ 家計（都道府県別）"
+      - name: "0002210008"
+        description: "家計調査 - 貯蓄・負債（都市階級・地方・県庁所在市別）"
+      - name: "0004026264"
+        description: "人口推計 - 都道府県・男女別人口"
