@@ -1,0 +1,50 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: 'main'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # --- dbt build ---
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dbt
+        run: pip install dbt-core dbt-duckdb
+      - name: Run dbt build
+        working-directory: dbt_project
+        run: dbt build
+
+      # --- Evidence build ---
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: evidence_app/package-lock.json
+      - name: Install Evidence dependencies
+        working-directory: evidence_app
+        run: npm ci
+      - name: Build Evidence
+        working-directory: evidence_app
+        run: |
+          npm run sources
+          npm run build
+
+      # --- Deploy to GitHub Pages ---
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: evidence_app/build/japan-info-dashboard
+      - id: deployment
+        uses: actions/deploy-pages@v4
