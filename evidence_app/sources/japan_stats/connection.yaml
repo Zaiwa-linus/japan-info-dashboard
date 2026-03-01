@@ -1,0 +1,4 @@
+name: japan_stats
+type: duckdb
+options:
+  filename: ../../../dbt_project/target/dev.duckdb
