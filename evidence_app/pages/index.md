@@ -41,34 +41,19 @@ group by area_name, area_code
 order by total_population desc
 ```
 
-### 都道府県別 総人口ランキング（男女合計）
+### 都道府県別 総人口マップ
 
-<BarChart
+<AreaMap
     data={population_total}
-    x=area_name
-    y=total_population
+    geoJsonUrl=/japan_prefectures.geojson
+    geoId=nam_ja
+    areaCol=area_name
+    value=total_population
+    valueFmt=num0
     title="都道府県別 総人口"
-    xAxisTitle="都道府県"
-    yAxisTitle="人口（人）"
-    swapXY=true
-    sort=false
-    yFmt=num0
-/>
-
-### 都道府県別 男女別人口
-
-<BarChart
-    data={population_by_area}
-    x=area_name
-    y=population
-    series=gender_name
-    title="都道府県別 男女別人口"
-    xAxisTitle="都道府県"
-    yAxisTitle="人口（人）"
-    type=stacked
-    swapXY=true
-    sort=false
-    yFmt=num0
+    height=500
+    legendType=scalar
+    tooltip={[{id: 'area_name', title: '都道府県'}, {id: 'total_population', title: '人口', fmt: 'num0'}]}
 />
 
 ### 人口データテーブル
@@ -100,16 +85,17 @@ order by change desc
 
 ## 前年比較（2023年 → 2024年）
 
-<BarChart
+<AreaMap
     data={yoy_comparison}
-    x=area_name
-    y=change
+    geoJsonUrl=/japan_prefectures.geojson
+    geoId=nam_ja
+    areaCol=area_name
+    value=change
+    valueFmt=num0
     title="都道府県別 人口増減（2023→2024）"
-    xAxisTitle="都道府県"
-    yAxisTitle="増減数（人）"
-    swapXY=true
-    sort=false
-    yFmt=num0
+    height=500
+    legendType=scalar
+    tooltip={[{id: 'area_name', title: '都道府県'}, {id: 'change', title: '増減数', fmt: 'num0'}, {id: 'change_pct', title: '増減率(%)', fmt: 'num2'}]}
 />
 
 <DataTable data={yoy_comparison} rows=all search=true>
@@ -121,3 +107,7 @@ order by change desc
 </DataTable>
 
 <LastRefreshed />
+
+---
+
+<small>地図データ出典：<a href="https://www.gsi.go.jp/kankyochiri/gm_japan_e.html" target="_blank">地球地図日本</a>（国土地理院）</small>
