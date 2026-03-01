@@ -9,7 +9,8 @@
       "Bash(uv run python Estat/get_meta.py *)",
       "Bash(uv run python Estat/download_data.py *)",
       "Bash(uv run dbt show *)",
-      "Bash(uv run dbt build *)"
+      "Bash(uv run dbt build *)",
+      "WebFetch(domain:evidence.dev)"
     ]
   }
 }
