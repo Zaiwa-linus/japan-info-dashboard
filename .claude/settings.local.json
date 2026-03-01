@@ -7,7 +7,9 @@
       "Bash(export ESTAT_API_APPID)",
       "Bash(uv run python Estat/search_stats.py *)",
       "Bash(uv run python Estat/get_meta.py *)",
-      "Bash(uv run python Estat/download_data.py *)"
+      "Bash(uv run python Estat/download_data.py *)",
+      "Bash(uv run dbt show *)",
+      "Bash(uv run dbt build --select stg_economic_base stg_household stg_savings_debt stg_population --quiet --warn-error-options '{\"\"error\"\": [\"\"NoNodesForSelectionCriteria\"\"]}')"
     ]
   }
 }
