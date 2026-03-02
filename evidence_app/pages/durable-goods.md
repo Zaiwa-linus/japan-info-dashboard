@@ -67,7 +67,7 @@ order by area_code
 
 <AreaMap
     data={map_data}
-    geoJsonUrl=japan_prefectures.geojson
+    geoJsonUrl=/japan-info-dashboard/japan_prefectures.geojson
     geoId=nam_ja
     areaCol=area_name
     value=value
