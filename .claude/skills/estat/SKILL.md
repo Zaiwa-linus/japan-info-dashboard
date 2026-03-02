@@ -82,12 +82,10 @@ uv run python Estat/get_meta.py 0003317252 --json
 ### Step 3: データをCSVとしてダウンロードする（download_data.py）
 
 ```bash
-# 必ず -o で英名の概要をファイル名に指定して保存する
 # 例: 都道府県別人口データの場合
-uv run python Estat/download_data.py 0003317252 -o data/0003317252/population_by_prefecture.csv
+uv run python Estat/download_data.py 0003317252
 ```
 
-- **必ず `-o` オプションで英名の概要をファイル名に指定すること**（例: `population_by_prefecture.csv`, `tourist_spending.csv`）
 - デフォルトでは `data/{統計表ID}/` ディレクトリを作成し、CSVと `description.md` を保存
 - `description.md` にはAPIから取得した統計名・タイトル・提供機関・周期等の概要を記載
 - ページネーション対応（10万件超のデータも自動で全件取得）
