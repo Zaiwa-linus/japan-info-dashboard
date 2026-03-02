@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: int_master_household_indicator
+    description: "家計指標マスタ。元データの冗長な指標名を短縮名で補完する。"
+    columns:
+      - name: indicator_code
+        description: "指標コード"
+        tests:
+          - unique
+          - not_null
+      - name: indicator_name
+        description: "指標名称（元データそのまま）"
+      - name: indicator_short_name
+        description: "ダッシュボード表示用の短縮名"

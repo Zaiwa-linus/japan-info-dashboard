@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: mart_durable_goods
+    description: "耐久消費財所有数量（二人以上の世帯）の都道府県別マート。マスタから短縮名を結合済み。"
+    columns:
+      - name: indicator_code
+        description: "耐久消費財の指標コード（L51xx系）"
+      - name: indicator_name
+        description: "指標名称（元データそのまま）"
+      - name: indicator_short_name
+        description: "ダッシュボード表示用の短縮名"
+      - name: area_code
+        description: "都道府県コード"
+      - name: area_name
+        description: "都道府県名"
+      - name: year
+        description: "調査年（整数）"
+      - name: unit
+        description: "値の単位（台、セット、畳）"
+      - name: value
+        description: "所有数量（千世帯あたり）"
