@@ -11,4 +11,3 @@ select
     value
 from {{ ref('stg_household') }}
 where indicator_code like 'L51%'
-    and area_name != '全国'
