@@ -8,6 +8,7 @@ title: 日本の統計ダッシュボード
 
 - [耐久消費財の普及状況](/japan-info-dashboard/durable-goods)
 - [小売業態別 販売動向](/japan-info-dashboard/retail-sales)
+- [国籍別・入国目的別 新規入国外国人](/japan-info-dashboard/immigration)
 
 ---
 
