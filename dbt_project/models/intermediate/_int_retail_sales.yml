@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: int_retail_sales
+    description: "商業動態統計 - 4業態（コンビニ・家電量販店・ドラッグストア・ホームセンター）の都道府県別月次販売額・店舗数。集計項目を横持ちに変換済み。"
+    columns:
+      - name: area_code
+        description: "都道府県コード"
+      - name: area_name
+        description: "都道府県名"
+      - name: store_type
+        description: "業態名（コンビニ、家電量販店、ドラッグストア、ホームセンター）"
+      - name: year
+        description: "年（整数）"
+      - name: month
+        description: "月（整数）"
+      - name: year_month
+        description: "年月（DATE型、各月1日）"
+      - name: time_name
+        description: "時間軸の表示名称（例: 2024年1月）"
+      - name: sales_amount
+        description: "販売額（百万円）"
+      - name: store_count
+        description: "店舗数"
