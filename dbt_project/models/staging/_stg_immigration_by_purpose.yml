@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: stg_immigration_by_purpose
+    description: "出入国管理統計 - 国籍・地域別 入国目的別 新規入国外国人。2002〜2024年の時系列データ。"
+    columns:
+      - name: item_code
+        description: "表章項目コード"
+        tests:
+          - accepted_values:
+              values: ["100"]
+      - name: purpose_code
+        description: "入国目的コード（短期滞在・特定活動・日本人の配偶者等・定住者）"
+      - name: purpose_name
+        description: "入国目的の名称"
+      - name: nationality_code
+        description: "国籍・地域コード"
+      - name: nationality_name
+        description: "国籍・地域の名称"
+      - name: year_code
+        description: "年次コード"
+      - name: year_name
+        description: "年次の表示名称（例: 2024年）"
+      - name: unit
+        description: "単位（人）"
+      - name: value
+        description: "入国者数"

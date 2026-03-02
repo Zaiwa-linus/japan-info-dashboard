@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: mart_immigration_by_purpose
+    description: "新規入国外国人マート。国籍・入国目的別の入国者数（2002〜2024年）。"
+    columns:
+      - name: purpose_code
+        description: "入国目的コード"
+      - name: purpose_name
+        description: "入国目的の名称"
+      - name: purpose_category
+        description: "入国目的の大分類（短期滞在・特定活動・日本人の配偶者等・定住者）"
+      - name: is_subtotal
+        description: "小計行フラグ"
+      - name: nationality_code
+        description: "国籍・地域コード"
+      - name: nationality_name
+        description: "国籍・地域の名称"
+      - name: year
+        description: "年（整数）"
+      - name: value
+        description: "入国者数（人）"

@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: int_immigration_by_purpose
+    description: "新規入国外国人の中間モデル。地域集約行を除外し、入国目的の大分類を付与。"
+    columns:
+      - name: purpose_code
+        description: "入国目的コード"
+      - name: purpose_name
+        description: "入国目的の名称"
+      - name: purpose_category
+        description: "入国目的の大分類（短期滞在・特定活動・日本人の配偶者等・定住者）"
+      - name: is_subtotal
+        description: "小計行フラグ（各大分類の総数行）"
+      - name: nationality_code
+        description: "国籍・地域コード（個別国のみ）"
+      - name: nationality_name
+        description: "国籍・地域の名称"
+      - name: year
+        description: "年（整数）"
+      - name: value
+        description: "入国者数（人）"
