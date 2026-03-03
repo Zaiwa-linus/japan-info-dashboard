@@ -80,7 +80,7 @@ order by natural_change desc
 
 <AreaMap
     data={natural_change_ranking}
-    geoJsonUrl=japan_prefectures.geojson
+    geoJsonUrl=/japan-info-dashboard/japan_prefectures.geojson
     geoId=nam_ja
     areaCol=area_name
     value=natural_change

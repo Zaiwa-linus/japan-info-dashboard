@@ -43,7 +43,7 @@ order by raw_value desc
 
 <AreaMap
     data={total_migration}
-    geoJsonUrl=japan_prefectures.geojson
+    geoJsonUrl=/japan-info-dashboard/japan_prefectures.geojson
     geoId=nam_ja
     areaCol=current_address_name
     value=total_migrants
@@ -82,7 +82,7 @@ order by raw_value desc
 
 <AreaMap
     data={foreign_migration}
-    geoJsonUrl=japan_prefectures.geojson
+    geoJsonUrl=/japan-info-dashboard/japan_prefectures.geojson
     geoId=nam_ja
     areaCol=current_address_name
     value=foreign_migrants
