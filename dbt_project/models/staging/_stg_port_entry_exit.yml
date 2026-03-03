@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: stg_port_entry_exit
+    description: "出入国管理統計 - 港別 出入国者。1997〜2024年の空港・港別出入国者数データ。"
+    columns:
+      - name: item_code
+        description: "表章項目コード"
+        tests:
+          - accepted_values:
+              values: ["140"]
+      - name: item_name
+        description: "表章項目名称"
+        tests:
+          - accepted_values:
+              values: ["出入国者"]
+      - name: traveler_type_code
+        description: "出入国者の種別コード（計・日本人・外国人・協定該当者）"
+        tests:
+          - accepted_values:
+              values: ["100", "110", "120", "130"]
+      - name: traveler_type_name
+        description: "出入国者の種別名称"
+        tests:
+          - accepted_values:
+              values: ["計", "日本人", "外国人", "協定該当者"]
+      - name: direction_code
+        description: "入国・出国の区分コード"
+        tests:
+          - accepted_values:
+              values: ["100", "110", "120"]
+      - name: direction_name
+        description: "入国・出国の区分名称"
+        tests:
+          - accepted_values:
+              values: ["総数", "入国者", "出国者"]
+      - name: port_code
+        description: "港コード（空港・港）"
+      - name: port_name
+        description: "港名称（空港・港）"
+      - name: year_code
+        description: "年次コード"
+      - name: year_name
+        description: "年次の表示名称（例: 2024年）"
+      - name: unit_name
+        description: "値の単位"
+        tests:
+          - accepted_values:
+              values: ["人"]
+      - name: raw_value
+        description: "出入国者数（bigint型にキャスト済み）"

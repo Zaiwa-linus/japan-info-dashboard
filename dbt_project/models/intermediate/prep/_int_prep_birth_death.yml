@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: int_prep_birth_death
+    description: "都道府県別の出生児数・死亡者数（全国を除く）。日本人・外国人、男女別。"
+    columns:
+      - name: birth_death_code
+        description: "出生児数・死亡者数の区分コード"
+      - name: birth_death_name
+        description: "出生児数・死亡者数の区分名称"
+      - name: gender_code
+        description: "男女別コード"
+      - name: gender_name
+        description: "男女別の名称"
+      - name: nationality_code
+        description: "日本人・外国人の区分コード"
+      - name: nationality_name
+        description: "日本人・外国人の区分名称"
+      - name: area_code
+        description: "都道府県コード"
+      - name: area_name
+        description: "都道府県名"
+      - name: year_code
+        description: "年次コード"
+      - name: year_name
+        description: "年次の表示名称"
+      - name: unit_name
+        description: "値の単位"
+      - name: raw_value
+        description: "出生児数または死亡者数（人）"

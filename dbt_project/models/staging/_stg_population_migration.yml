@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: stg_population_migration
+    description: "住民基本台帳人口移動報告 - 移動前の住所地別転入者数。2024年の都道府県・市区町村別データ。"
+    columns:
+      - name: item_code
+        description: "表章項目コード"
+        tests:
+          - accepted_values:
+              values: ["18"]
+      - name: item_name
+        description: "表章項目名称"
+        tests:
+          - accepted_values:
+              values: ["移動前の住所地別転入者数"]
+      - name: current_address_code
+        description: "移動後の住所地（現住地）コード"
+      - name: current_address_name
+        description: "移動後の住所地（現住地）名称"
+      - name: nationality_code
+        description: "国籍区分コード（移動者・日本人移動者・外国人移動者）"
+        tests:
+          - accepted_values:
+              values: ["60000", "61000", "62000"]
+      - name: nationality_name
+        description: "国籍区分名称"
+        tests:
+          - accepted_values:
+              values: ["移動者", "日本人移動者", "外国人移動者"]
+      - name: previous_address_code
+        description: "移動前の住所地（前住地）コード"
+      - name: previous_address_name
+        description: "移動前の住所地（前住地）名称"
+      - name: year_code
+        description: "年次コード"
+        tests:
+          - accepted_values:
+              values: ["2024000000"]
+      - name: year_name
+        description: "年次の表示名称"
+        tests:
+          - accepted_values:
+              values: ["2024年"]
+      - name: unit_name
+        description: "値の単位"
+        tests:
+          - accepted_values:
+              values: ["人"]
+      - name: raw_value
+        description: "転入者数（bigint型にキャスト済み）"

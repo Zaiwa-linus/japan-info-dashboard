@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: mart_birth_death
+    description: "都道府県別 出生児数・死亡者数マート。日本人・外国人、男女別（2023年10月〜2024年9月）。"
+    columns:
+      - name: birth_death_code
+        description: "出生児数・死亡者数の区分コード"
+      - name: birth_death_name
+        description: "出生児数・死亡者数の区分名称"
+      - name: gender_code
+        description: "男女別コード"
+      - name: gender_name
+        description: "男女別の名称"
+      - name: nationality_code
+        description: "日本人・外国人の区分コード"
+      - name: nationality_name
+        description: "日本人・外国人の区分名称"
+      - name: area_code
+        description: "都道府県コード"
+      - name: area_name
+        description: "都道府県名"
+      - name: year_name
+        description: "年次の表示名称"
+      - name: unit_name
+        description: "値の単位"
+      - name: raw_value
+        description: "出生児数または死亡者数（人）"
