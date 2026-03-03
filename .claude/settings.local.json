@@ -11,7 +11,8 @@
       "Bash(uv run dbt show *)",
       "Bash(uv run dbt build *)",
       "WebFetch(domain:evidence.dev)",
-      "Bash(npm run sources)"
+      "Bash(npm run sources)",
+      "Bash(uv run python .claude/skills/dbt/*.py)"
     ]
   }
 }
