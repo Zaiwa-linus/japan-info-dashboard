@@ -1,5 +1,6 @@
 -- 出入国管理統計 - 国籍・地域別 入国目的別 新規入国外国人
 -- 統計表ID: 0003288053
+-- description: data/0003288053/description.md
 
 with source as (
     select * from {{ source('estat', '0003288053') }}
@@ -14,6 +15,6 @@ select
     "国籍・地域" as nationality_name,
     "時間軸(年次)_code" as year_code,
     "時間軸(年次)" as year_name,
-    unit,
-    try_cast(value as bigint) as value
+    unit as unit_name,
+    try_cast(value as bigint) as raw_value
 from source

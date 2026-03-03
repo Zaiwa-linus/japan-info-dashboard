@@ -13,7 +13,7 @@ title: 国籍別・入国目的別 新規入国外国人
 ```sql yearly_total
 select
     year,
-    sum(value) as total_entries
+    sum(raw_value) as total_entries
 from japan_stats.mart_immigration_by_purpose
 where purpose_code = '100'
 group by year
@@ -52,7 +52,7 @@ select distinct region from japan_stats.mart_immigration_by_purpose where region
 ```sql top_countries
 select
     nationality_name,
-    sum(value) as total_entries
+    sum(raw_value) as total_entries
 from japan_stats.mart_immigration_by_purpose
 where purpose_code = '100'
     and year = ${inputs.selected_year.value}
@@ -85,7 +85,7 @@ limit 20
 ```sql purpose_breakdown
 select
     purpose_name,
-    sum(value) as total_entries
+    sum(raw_value) as total_entries
 from japan_stats.mart_immigration_by_purpose
 where is_subtotal = false
     and year = ${inputs.selected_year.value}
@@ -98,7 +98,7 @@ order by total_entries desc
 ```sql purpose_category_breakdown
 select
     purpose_category,
-    sum(value) as total_entries
+    sum(raw_value) as total_entries
 from japan_stats.mart_immigration_by_purpose
 where is_subtotal = true
     and year = ${inputs.selected_year.value}
@@ -143,7 +143,7 @@ order by total_entries desc
 select
     nationality_name,
     purpose_name,
-    sum(value) as total_entries
+    sum(raw_value) as total_entries
 from japan_stats.mart_immigration_by_purpose
 where is_subtotal = false
     and year = ${inputs.selected_year.value}
@@ -155,7 +155,7 @@ where is_subtotal = false
         where purpose_code = '100'
             and year = ${inputs.selected_year.value}
             and region like '${inputs.selected_region.value}'
-        order by value desc
+        order by raw_value desc
         limit 10
     )
 group by nationality_name, purpose_name
@@ -182,14 +182,14 @@ order by nationality_name, total_entries desc
 select
     year,
     nationality_name,
-    sum(value) as total_entries
+    sum(raw_value) as total_entries
 from japan_stats.mart_immigration_by_purpose
 where purpose_code = '100'
     and nationality_name in (
         select nationality_name
         from japan_stats.mart_immigration_by_purpose
         where purpose_code = '100' and year = 2024
-        order by value desc
+        order by raw_value desc
         limit 10
     )
 group by year, nationality_name
@@ -214,11 +214,11 @@ order by year
 ```sql wh_by_country
 select
     nationality_name,
-    sum(value) as total_entries
+    sum(raw_value) as total_entries
 from japan_stats.mart_immigration_by_purpose
 where purpose_code = '200'
     and year = ${inputs.selected_year.value}
-    and value > 0
+    and raw_value > 0
     and region like '${inputs.selected_region.value}'
 group by nationality_name
 order by total_entries desc
@@ -228,7 +228,7 @@ limit 20
 ```sql wh_trend
 select
     year,
-    sum(value) as total_entries
+    sum(raw_value) as total_entries
 from japan_stats.mart_immigration_by_purpose
 where purpose_code = '200'
 group by year

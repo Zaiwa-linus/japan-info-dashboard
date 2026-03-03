@@ -1,5 +1,6 @@
--- 新規入国外国人 - 国籍・入国目的別の中間モデル
--- 地域集約行（総数・大陸）を除外し、入国目的の大分類・年を整理
+-- [責務] 入国目的コードに目的カテゴリ・地域分類を付与し、集約行を除外する
+-- [ユニークキー] purpose_code, nationality_code, year
+-- [入力] stg_immigration_by_purpose
 
 with base as (
     select
@@ -9,9 +10,9 @@ with base as (
         nationality_name,
         year_code,
         cast(left(cast(year_code as varchar), 4) as int) as year,
-        value
+        raw_value
     from {{ ref('stg_immigration_by_purpose') }}
-    where value is not null
+    where raw_value is not null
 ),
 
 -- 地域集約コード（総数・大陸）を除外し、個別国のみ残す
@@ -68,5 +69,5 @@ select
     nationality_name,
     region,
     year,
-    value
+    raw_value
 from with_category

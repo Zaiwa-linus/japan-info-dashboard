@@ -16,7 +16,7 @@ models:
         description: "都道府県名"
       - name: year
         description: "調査年（整数）"
-      - name: unit
+      - name: unit_name
         description: "値の単位（台、セット、畳）"
-      - name: value
+      - name: raw_value
         description: "所有数量（千世帯あたり）"

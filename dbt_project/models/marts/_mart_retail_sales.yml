@@ -8,7 +8,7 @@ models:
         description: "都道府県コード"
       - name: area_name
         description: "都道府県名"
-      - name: store_type
+      - name: store_type_name
         description: "業態名（コンビニ、家電量販店、ドラッグストア、ホームセンター）"
       - name: year
         description: "年（整数）"

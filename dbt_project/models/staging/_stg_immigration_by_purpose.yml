@@ -21,7 +21,7 @@ models:
         description: "年次コード"
       - name: year_name
         description: "年次の表示名称（例: 2024年）"
-      - name: unit
+      - name: unit_name
         description: "単位（人）"
-      - name: value
+      - name: raw_value
         description: "入国者数"

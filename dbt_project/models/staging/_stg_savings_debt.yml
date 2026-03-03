@@ -338,7 +338,7 @@ models:
                 - "2022年"
                 - "2023年"
                 - "2024年"
-      - name: unit
+      - name: unit_name
         description: "値の単位（例: 万円、%）"
         tests:
           - accepted_values:
@@ -350,5 +350,5 @@ models:
                 - "人"
                 - "歳"
                 - "％"
-      - name: value
+      - name: raw_value
         description: "指標の数値（double型にキャスト済み）"

@@ -19,19 +19,19 @@ select distinct area_name from japan_stats.mart_retail_sales order by area_code
 ```sql monthly_trend
 select
     year_month,
-    store_type,
+    store_type_name,
     sales_amount
 from japan_stats.mart_retail_sales
 where area_name = '${inputs.selected_area.value}'
     and sales_amount is not null
-order by year_month, store_type
+order by year_month, store_type_name
 ```
 
 <LineChart
     data={monthly_trend}
     x=year_month
     y=sales_amount
-    series=store_type
+    series=store_type_name
     title="{inputs.selected_area.value} の業態別 月次販売額"
     yAxisTitle="販売額（百万円）"
 />
@@ -40,15 +40,15 @@ order by year_month, store_type
 
 ## 都道府県別 販売額マップ
 
-```sql store_types
-select distinct store_type from japan_stats.mart_retail_sales order by store_type
+```sql store_type_names
+select distinct store_type_name from japan_stats.mart_retail_sales order by store_type_name
 ```
 
 ```sql months
 select distinct cast(year_month as varchar) as year_month, time_name from japan_stats.mart_retail_sales order by year_month desc
 ```
 
-<Dropdown data={store_types} name=selected_store value=store_type defaultValue="コンビニ" />
+<Dropdown data={store_type_names} name=selected_store value=store_type_name defaultValue="コンビニ" />
 <Dropdown data={months} name=selected_month value=year_month label=time_name />
 
 ```sql map_data
@@ -57,7 +57,7 @@ select
     area_code,
     sales_amount
 from japan_stats.mart_retail_sales
-where store_type = '${inputs.selected_store.value}'
+where store_type_name = '${inputs.selected_store.value}'
     and cast(year_month as varchar) = '${inputs.selected_month.value}'
     and sales_amount is not null
 order by area_code
@@ -86,7 +86,7 @@ select
     sales_amount,
     store_count
 from japan_stats.mart_retail_sales
-where store_type = '${inputs.selected_store.value}'
+where store_type_name = '${inputs.selected_store.value}'
     and cast(year_month as varchar) = '${inputs.selected_month.value}'
     and sales_amount is not null
 order by sales_amount desc
@@ -115,19 +115,19 @@ order by sales_amount desc
 ```sql store_trend
 select
     year_month,
-    store_type,
+    store_type_name,
     store_count
 from japan_stats.mart_retail_sales
 where area_name = '${inputs.selected_area.value}'
     and store_count is not null
-order by year_month, store_type
+order by year_month, store_type_name
 ```
 
 <LineChart
     data={store_trend}
     x=year_month
     y=store_count
-    series=store_type
+    series=store_type_name
     title="{inputs.selected_area.value} の業態別 店舗数の推移"
     yAxisTitle="店舗数"
 />
@@ -138,13 +138,13 @@ order by year_month, store_type
 
 ```sql composition
 select
-    store_type,
+    store_type_name,
     sum(sales_amount) as total_sales
 from japan_stats.mart_retail_sales
 where area_name = '${inputs.selected_area.value}'
     and year = 2024
     and sales_amount is not null
-group by store_type
+group by store_type_name
 order by total_sales desc
 ```
 
@@ -154,7 +154,7 @@ order by total_sales desc
         series: [{
             type: 'pie',
             radius: ['40%', '70%'],
-            data: composition.map(row => ({name: row.store_type, value: row.total_sales})),
+            data: composition.map(row => ({name: row.store_type_name, value: row.total_sales})),
             label: {formatter: '{b}\n{d}%'}
         }]
     }

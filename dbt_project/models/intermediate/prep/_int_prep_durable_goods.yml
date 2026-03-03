@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: int_durable_goods
+  - name: int_prep_durable_goods
     description: "耐久消費財所有数量（二人以上の世帯）の全国・都道府県別データ。スマートフォン・自動車・エアコン等の普及状況を時系列で確認できる。"
     columns:
       - name: indicator_code
@@ -14,7 +14,7 @@ models:
         description: "都道府県名"
       - name: year
         description: "調査年（整数）"
-      - name: unit
+      - name: unit_name
         description: "値の単位（台、セット、畳）"
-      - name: value
+      - name: raw_value
         description: "所有数量（千世帯あたり）"

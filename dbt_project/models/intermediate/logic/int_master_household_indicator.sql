@@ -1,5 +1,6 @@
--- 家計指標マスタ
--- stgから指標コード・名称の一覧を取得し、長すぎる名称のみ短縮名で上書きする
+-- [責務] 家計指標の冗長な名称をダッシュボード表示用の短縮名にマッピングする
+-- [ユニークキー] indicator_code
+-- [入力] stg_household
 
 with raw_master as (
     select distinct

@@ -28,7 +28,7 @@ select distinct gender_name from japan_stats.mart_population order by gender_nam
 select
     area_name,
     gender_name,
-    value as population
+    raw_value as population
 from japan_stats.mart_population
 where year_name = '${inputs.selected_year.value}'
 order by area_code
@@ -38,7 +38,7 @@ order by area_code
 select
     area_name,
     area_code,
-    sum(value) as total_population
+    sum(raw_value) as total_population
 from japan_stats.mart_population
 where year_name = '${inputs.selected_year.value}'
 group by area_name, area_code
@@ -73,14 +73,14 @@ order by total_population desc
 select
     a.area_name,
     a.area_code,
-    sum(case when a.year_name = '2023年10月1日現在' then a.value else 0 end) as pop_2023,
-    sum(case when a.year_name = '2024年10月1日現在' then a.value else 0 end) as pop_2024,
-    sum(case when a.year_name = '2024年10月1日現在' then a.value else 0 end)
-    - sum(case when a.year_name = '2023年10月1日現在' then a.value else 0 end) as change,
+    sum(case when a.year_name = '2023年10月1日現在' then a.raw_value else 0 end) as pop_2023,
+    sum(case when a.year_name = '2024年10月1日現在' then a.raw_value else 0 end) as pop_2024,
+    sum(case when a.year_name = '2024年10月1日現在' then a.raw_value else 0 end)
+    - sum(case when a.year_name = '2023年10月1日現在' then a.raw_value else 0 end) as change,
     round(
-        (sum(case when a.year_name = '2024年10月1日現在' then a.value else 0 end)
-        - sum(case when a.year_name = '2023年10月1日現在' then a.value else 0 end))
-        / sum(case when a.year_name = '2023年10月1日現在' then a.value else 0 end) * 100
+        (sum(case when a.year_name = '2024年10月1日現在' then a.raw_value else 0 end)
+        - sum(case when a.year_name = '2023年10月1日現在' then a.raw_value else 0 end))
+        / sum(case when a.year_name = '2023年10月1日現在' then a.raw_value else 0 end) * 100
     , 2) as change_pct
 from japan_stats.mart_population a
 group by a.area_name, a.area_code

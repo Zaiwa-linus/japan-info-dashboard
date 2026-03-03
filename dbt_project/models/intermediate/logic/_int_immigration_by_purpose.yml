@@ -18,5 +18,5 @@ models:
         description: "国籍・地域の名称"
       - name: year
         description: "年（整数）"
-      - name: value
+      - name: raw_value
         description: "入国者数（人）"
