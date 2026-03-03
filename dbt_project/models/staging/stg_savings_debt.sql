@@ -1,5 +1,6 @@
 -- 家計調査 - 貯蓄・負債（都市階級・地方・県庁所在市別）
 -- 統計表ID: 0002210008
+-- description: data/0002210008/description.md
 
 with source as (
     select * from {{ source('estat', '0002210008') }}
@@ -16,6 +17,6 @@ select
     "地域区分" as area_name,
     "時間軸（年次）_code" as year_code,
     "時間軸（年次）" as year_name,
-    unit,
-    try_cast(value as double) as value
+    unit as unit_name,
+    try_cast(value as double) as raw_value
 from source

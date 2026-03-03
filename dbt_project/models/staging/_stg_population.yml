@@ -171,10 +171,10 @@ models:
                 - "2023年10月1日現在"
                 - "2023年10月～2024年9月"
                 - "2024年10月1日現在"
-      - name: unit
+      - name: unit_name
         description: "値の単位（例: 1000人、%）"
         tests:
           - accepted_values:
               values: ["人"]
-      - name: value
+      - name: raw_value
         description: "指標の数値（double型にキャスト済み）"

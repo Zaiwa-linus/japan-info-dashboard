@@ -200,10 +200,10 @@ models:
                 - "2024年11月"
                 - "2024年12月"
                 - "2025年1月"
-      - name: store_type
+      - name: store_type_name
         description: "業態名（ホームセンター）"
         tests:
           - accepted_values:
               values: ["ホームセンター"]
-      - name: value
+      - name: raw_value
         description: "指標の数値（double型にキャスト済み）"

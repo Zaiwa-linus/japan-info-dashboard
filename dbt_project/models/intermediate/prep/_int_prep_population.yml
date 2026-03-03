@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: int_population
+  - name: int_prep_population
     description: "都道府県別・男女別の総人口（全国を除く）。2023年・2024年の10月1日時点データ。"
     columns:
       - name: item_code
@@ -28,7 +28,7 @@ models:
         description: "年次コード"
       - name: year_name
         description: "年次の表示名称（2023年10月1日現在、2024年10月1日現在）"
-      - name: unit
+      - name: unit_name
         description: "値の単位"
-      - name: value
+      - name: raw_value
         description: "人口（人）"

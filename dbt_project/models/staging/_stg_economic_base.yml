@@ -9,7 +9,7 @@ models:
         tests:
           - accepted_values:
               values: ["00001"]
-      - name: observation
+      - name: observation_name
         description: "観測値の分類名称"
         tests:
           - accepted_values:
@@ -234,7 +234,7 @@ models:
                 - "2022年度"
                 - "2023年度"
                 - "2024年度"
-      - name: unit
+      - name: unit_name
         description: "値の単位（例: 百万円、事業所）"
         tests:
           - accepted_values:
@@ -270,5 +270,5 @@ models:
                 - "ｋｍ"
                 - "ｍ2"
                 - "ｍ3／日"
-      - name: value
+      - name: raw_value
         description: "指標の数値（double型にキャスト済み）"

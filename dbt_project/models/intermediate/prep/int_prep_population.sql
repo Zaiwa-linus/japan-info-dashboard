@@ -1,5 +1,6 @@
--- 都道府県別・男女別の総人口（全国を除く）
--- 2023年・2024年の10月1日時点の人口データ
+-- [責務] 都道府県別・男女別の総人口を抽出し、全国行と不要な分類を除外する
+-- [ユニークキー] area_code, gender_code, year_code
+-- [入力] stg_population
 
 select
     item_code,
@@ -14,8 +15,8 @@ select
     area_name,
     year_code,
     year_name,
-    unit,
-    value
+    unit_name,
+    raw_value
 from {{ ref('stg_population') }}
 where population_type_name = '人口'
     and gender_name in ('男', '女')

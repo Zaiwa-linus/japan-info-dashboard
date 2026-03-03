@@ -1,5 +1,6 @@
 -- 人口推計 - 都道府県・男女別人口
 -- 統計表ID: 0004026264
+-- description: data/0004026264/description.md
 
 with source as (
     select * from {{ source('estat', '0004026264') }}
@@ -18,6 +19,6 @@ select
     "全国・都道府県" as area_name,
     "時間軸（年間）_code" as year_code,
     "時間軸（年間）" as year_name,
-    unit,
-    try_cast(value as double) as value
+    unit as unit_name,
+    try_cast(value as double) as raw_value
 from source

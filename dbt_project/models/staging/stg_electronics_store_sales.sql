@@ -1,5 +1,6 @@
 -- 商業動態統計調査 - 家電大型専門店 都道府県別販売額等
 -- 統計表ID: 0004032505
+-- description: data/0004032505/description.md
 
 with source as (
     select * from {{ source('estat', '0004032505') }}
@@ -16,6 +17,6 @@ select
     "都道府県" as area_name,
     cast("時間軸_db_code" as varchar) as time_code,
     "時間軸_db" as time_name,
-    '家電量販店' as store_type,
-    try_cast(value as double) as value
+    '家電量販店' as store_type_name,
+    try_cast(value as double) as raw_value
 from source

@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: int_retail_sales
+  - name: int_prep_retail_sales
     description: "商業動態統計 - 4業態（コンビニ・家電量販店・ドラッグストア・ホームセンター）の都道府県別月次データ（縦持ち）。月次のみに絞り込み、増減率を除外。"
     columns:
       - name: unit_code
@@ -24,7 +24,7 @@ models:
         description: "時間軸コード（月次のみ）"
       - name: time_name
         description: "時間軸の表示名称（例: 2024年1月）"
-      - name: store_type
+      - name: store_type_name
         description: "業態名（コンビニ、家電量販店、ドラッグストア、ホームセンター）"
-      - name: value
+      - name: raw_value
         description: "値（double型）"

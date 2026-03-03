@@ -20,17 +20,17 @@ select distinct area_name from japan_stats.mart_durable_goods order by area_name
 select
     indicator_short_name,
     year,
-    value
+    raw_value
 from japan_stats.mart_durable_goods
 where area_name = '${inputs.selected_area.value}'
-    and value is not null
+    and raw_value is not null
 order by year
 ```
 
 <LineChart
     data={trend}
     x=year
-    y=value
+    y=raw_value
     series=indicator_short_name
     title="{inputs.selected_area.value} の耐久消費財所有数量の推移"
     yAxisTitle="千世帯あたり所有数量"
@@ -56,12 +56,12 @@ select distinct year from japan_stats.mart_durable_goods order by year desc
 select
     area_name,
     area_code,
-    value
+    raw_value
 from japan_stats.mart_durable_goods
 where indicator_short_name = '${inputs.selected_item.value}'
     and year = ${inputs.selected_year.value}
     and area_name != '全国'
-    and value is not null
+    and raw_value is not null
 order by area_code
 ```
 
@@ -70,12 +70,12 @@ order by area_code
     geoJsonUrl=/japan-info-dashboard/japan_prefectures.geojson
     geoId=nam_ja
     areaCol=area_name
-    value=value
+    value=raw_value
     valueFmt=num0
     title="{inputs.selected_item.value}（{inputs.selected_year.value}年）"
     height=500
     legendType=scalar
-    tooltip={[{id: 'area_name', title: '都道府県'}, {id: 'value', title: '千世帯あたり', fmt: 'num0'}]}
+    tooltip={[{id: 'area_name', title: '都道府県'}, {id: 'raw_value', title: '千世帯あたり', fmt: 'num0'}]}
 />
 
 ---
@@ -85,17 +85,17 @@ order by area_code
 ```sql ranking
 select
     area_name,
-    value
+    raw_value
 from japan_stats.mart_durable_goods
 where indicator_short_name = '${inputs.selected_item.value}'
     and year = ${inputs.selected_year.value}
-    and value is not null
-order by value desc
+    and raw_value is not null
+order by raw_value desc
 ```
 
 <DataTable data={ranking} rows=all search=true>
     <Column id=area_name title="都道府県" />
-    <Column id=value title="千世帯あたり所有数量" fmt=num0 />
+    <Column id=raw_value title="千世帯あたり所有数量" fmt=num0 />
 </DataTable>
 
 <LastRefreshed />

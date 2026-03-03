@@ -28,7 +28,7 @@ models:
         description: "年次コード"
       - name: year_name
         description: "年次の表示名称（2023年10月1日現在、2024年10月1日現在）"
-      - name: unit
+      - name: unit_name
         description: "値の単位"
-      - name: value
+      - name: raw_value
         description: "人口（人）"

@@ -1,6 +1,6 @@
--- 商業動態統計 - 4業態の都道府県別月次データ（縦持ち）
--- コンビニ / 家電量販店 / ドラッグストア / ホームセンター
--- 月次データのみに絞り込み、増減率を除外
+-- [責務] 4業態の月次販売データを統合し、月次データのみに絞り込む
+-- [ユニークキー] area_code, store_type_name, time_code, header_item_code, unit_code
+-- [入力] stg_convenience_store_sales, stg_electronics_store_sales, stg_drugstore_sales, stg_home_center_sales
 
 with unioned as (
     select * from {{ ref('stg_convenience_store_sales') }}
@@ -23,8 +23,8 @@ select
     area_name,
     time_code,
     time_name,
-    store_type,
-    value
+    store_type_name,
+    raw_value
 from unioned
 -- 月次データ: 末尾4桁がMMDD形式で前半2桁=後半2桁（例: 0101, 0202, ..., 1212）
 where substring(time_code, 7, 2) = substring(time_code, 9, 2)
