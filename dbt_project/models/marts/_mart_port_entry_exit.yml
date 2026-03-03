@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: mart_port_entry_exit
+    description: "港別出入国者マート。空港・港別の出入国者数（1997〜2024年）。"
+    columns:
+      - name: traveler_type_code
+        description: "出入国者の種別コード"
+      - name: traveler_type_name
+        description: "出入国者の種別名称"
+      - name: direction_code
+        description: "入国・出国の区分コード"
+      - name: direction_name
+        description: "入国・出国の区分名称"
+      - name: port_code
+        description: "港コード（空港・港）"
+      - name: port_name
+        description: "港名称（空港・港）"
+      - name: year
+        description: "年（整数）"
+      - name: raw_value
+        description: "出入国者数（人）"

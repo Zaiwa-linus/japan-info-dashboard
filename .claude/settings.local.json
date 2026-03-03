@@ -13,7 +13,8 @@
       "WebFetch(domain:evidence.dev)",
       "Bash(npm run sources)",
       "Bash(uv run python .claude/skills/dbt/*.py)",
-      "Bash(uv run dbt test)"
+      "Bash(uv run dbt test)",
+      "Bash(gh issue list --state open)"
     ]
   }
 }

@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: mart_population_migration
+    description: "都道府県別 転入者数マート。移動前の住所地別、国籍別（2024年）。"
+    columns:
+      - name: current_address_code
+        description: "移動後の住所地（現住地）コード"
+      - name: current_address_name
+        description: "移動後の住所地（現住地）名称"
+      - name: nationality_code
+        description: "国籍区分コード"
+      - name: nationality_name
+        description: "国籍区分名称"
+      - name: previous_address_code
+        description: "移動前の住所地（前住地）コード"
+      - name: previous_address_name
+        description: "移動前の住所地（前住地）名称"
+      - name: year_name
+        description: "年次の表示名称"
+      - name: raw_value
+        description: "転入者数（人）"
