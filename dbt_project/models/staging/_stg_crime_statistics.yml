@@ -1,0 +1,31 @@
+version: 2
+
+models:
+  - name: stg_crime_statistics
+    description: "犯罪統計 - 都道府県別 刑法犯 認知・検挙件数。2006〜2016年の管区警察局・都道府県別データ。"
+    columns:
+      - name: crime_metric_code
+        description: "認知・検挙件数・検挙人員の区分コード"
+        tests:
+          - accepted_values:
+              values: ["100", "110", "120", "130"]
+      - name: crime_metric_name
+        description: "認知・検挙件数・検挙人員の区分名称"
+        tests:
+          - accepted_values:
+              values: ["認知件数", "検挙件数", "検挙率", "検挙人員"]
+      - name: police_district_code
+        description: "管区警察局・都道府県コード"
+      - name: police_district_name
+        description: "管区警察局・都道府県名称"
+      - name: year_code
+        description: "年次コード"
+      - name: year_name
+        description: "年次の表示名称（例: 2016年）"
+      - name: unit_name
+        description: "値の単位（件、人、%）"
+        tests:
+          - accepted_values:
+              values: ["件", "人", "%"]
+      - name: raw_value
+        description: "認知件数・検挙件数・検挙人員・検挙率（double型にキャスト済み）"

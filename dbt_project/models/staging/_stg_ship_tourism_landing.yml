@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: stg_ship_tourism_landing
+    description: "出入国管理統計 - 船舶観光上陸許可（国籍・港別）。2016〜2024年の国籍・地域別、港別データ。"
+    columns:
+      - name: item_code
+        description: "表章項目コード"
+        tests:
+          - accepted_values:
+              values: ["420"]
+      - name: item_name
+        description: "表章項目名称"
+        tests:
+          - accepted_values:
+              values: ["船舶観光上陸許可を受けた外国人"]
+      - name: nationality_code
+        description: "国籍・地域コード"
+      - name: nationality_name
+        description: "国籍・地域名称"
+      - name: port_code
+        description: "港コード"
+      - name: port_name
+        description: "港名称"
+      - name: year_code
+        description: "年次コード"
+      - name: year_name
+        description: "年次の表示名称（例: 2024年）"
+      - name: unit_name
+        description: "値の単位"
+        tests:
+          - accepted_values:
+              values: ["人"]
+      - name: raw_value
+        description: "船舶観光上陸許可者数（bigint型にキャスト済み）"

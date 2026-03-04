@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: stg_consumer_price_index
+    description: "小売物価統計調査 - 都道府県別 消費者物価地域差指数（10大費目別）。2013〜2024年の都道府県・地方別データ。"
+    columns:
+      - name: item_code
+        description: "表章項目コード"
+        tests:
+          - accepted_values:
+              values: ["40"]
+      - name: item_name
+        description: "表章項目名称"
+        tests:
+          - accepted_values:
+              values: ["指数"]
+      - name: expense_category_code
+        description: "10大費目コード"
+        tests:
+          - accepted_values:
+              values: ["00010", "00020", "00030", "00040", "00050", "00060", "00070", "00080", "00090", "00100", "00110", "00120"]
+      - name: expense_category_name
+        description: "10大費目名称（総合、食料、住居、光熱・水道 等）"
+        tests:
+          - accepted_values:
+              values: ["総合", "食料", "住居", "光熱・水道", "家具・家事用品", "被服及び履物", "保健医療", "交通・通信", "教育", "教養娯楽", "諸雑費", "(参考)家賃を除く総合"]
+      - name: area_code
+        description: "地域コード（全国・都道府県・県庁所在市・地方ブロック）"
+      - name: area_name
+        description: "地域名称"
+      - name: year_code
+        description: "年次コード"
+      - name: year_name
+        description: "年次の表示名称（例: 2024年）"
+      - name: unit_name
+        description: "値の単位"
+      - name: raw_value
+        description: "消費者物価地域差指数（double型にキャスト済み）"
