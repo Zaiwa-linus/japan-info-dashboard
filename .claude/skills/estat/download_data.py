@@ -5,7 +5,7 @@
   python .claude/skills/estat/download_data.py 0003317114 -o data/custom_dir/data.csv
 
 デフォルトでは data/{統計表ID}/ ディレクトリを作成し、
-その中に {統計表ID}.csv と description.md を保存する。
+その中に {統計表ID}.csv と column_summary.yml を保存する。
 """
 
 import argparse
@@ -15,6 +15,7 @@ import os
 import sys
 import urllib.request
 import urllib.parse
+import yaml
 
 STATS_DATA_URL = "https://api.e-stat.go.jp/rest/3.0/app/json/getStatsData"
 META_URL = "https://api.e-stat.go.jp/rest/3.0/app/json/getMetaInfo"
@@ -89,108 +90,73 @@ def _get_text(val) -> str:
     return str(val) if val else ""
 
 
-def write_description(table_inf: dict, code_map: dict, class_names: dict, output_dir: str) -> None:
-    """メタ情報からdescription.mdを生成する。"""
-    stat_name = _get_text(table_inf.get("STAT_NAME", ""))
-    title = _get_text(table_inf.get("TITLE", ""))
-    gov_org = _get_text(table_inf.get("GOV_ORG", ""))
-    stats_id = table_inf.get("@id", "")
-    cycle = table_inf.get("CYCLE", "")
-    survey_date = table_inf.get("SURVEY_DATE", "")
-    open_date = table_inf.get("OPEN_DATE", "")
-    updated_date = table_inf.get("UPDATED_DATE", "")
-    total_number = table_inf.get("OVERALL_TOTAL_NUMBER", "")
-    stat_code = ""
+def _build_meta_info(table_inf: dict) -> dict:
+    """テーブル情報から基本情報のdictを構築する。"""
+    meta = {
+        "title": _get_text(table_inf.get("TITLE", "")),
+        "stats_data_id": table_inf.get("@id", ""),
+        "stat_name": _get_text(table_inf.get("STAT_NAME", "")),
+    }
     if isinstance(table_inf.get("STAT_NAME"), dict):
         stat_code = table_inf["STAT_NAME"].get("@code", "")
-    title_no = table_inf.get("TITLE_NO", "")
-    small_area = table_inf.get("SMALL_AREA", "")
+        if stat_code:
+            meta["stat_code"] = stat_code
+    gov_org = _get_text(table_inf.get("GOV_ORG", ""))
+    if gov_org:
+        meta["gov_org"] = gov_org
     main_category = _get_text(table_inf.get("MAIN_CATEGORY", ""))
-    sub_category = _get_text(table_inf.get("SUB_CATEGORY", ""))
-    description = _get_text(table_inf.get("STATISTICS_NAME_SPEC", {}).get("DESCRIPTION", "")) if isinstance(table_inf.get("STATISTICS_NAME_SPEC"), dict) else ""
-
-    # 基本情報
-    lines = [
-        f"# {title}",
-        "",
-        "## 基本情報",
-        "",
-        f"- **統計表ID**: {stats_id}",
-        f"- **統計名**: {stat_name}",
-    ]
-    if stat_code:
-        lines.append(f"- **統計コード**: {stat_code}")
-    lines.append(f"- **提供機関**: {gov_org}")
     if main_category:
-        lines.append(f"- **大分類**: {main_category}")
+        meta["main_category"] = main_category
+    sub_category = _get_text(table_inf.get("SUB_CATEGORY", ""))
     if sub_category:
-        lines.append(f"- **小分類**: {sub_category}")
-    if title_no:
-        lines.append(f"- **表番号**: {title_no}")
-    if cycle:
-        lines.append(f"- **周期**: {cycle}")
-    if survey_date:
-        lines.append(f"- **調査日**: {survey_date}")
-    if open_date:
-        lines.append(f"- **公開日**: {open_date}")
-    if updated_date:
-        lines.append(f"- **更新日**: {updated_date}")
-    if total_number:
-        lines.append(f"- **データ件数**: {total_number}")
-    if small_area and str(small_area) == "1":
-        lines.append(f"- **小地域データ**: あり")
-    if description:
-        lines.append(f"- **説明**: {description}")
-    lines.append("")
+        meta["sub_category"] = sub_category
+    for key, yaml_key in [("TITLE_NO", "title_no"), ("CYCLE", "cycle"),
+                           ("SURVEY_DATE", "survey_date"), ("OPEN_DATE", "open_date"),
+                           ("UPDATED_DATE", "updated_date"), ("OVERALL_TOTAL_NUMBER", "total_number")]:
+        val = table_inf.get(key, "")
+        if val:
+            meta[yaml_key] = str(val)
+    if str(table_inf.get("SMALL_AREA", "")) == "1":
+        meta["small_area"] = True
+    if isinstance(table_inf.get("STATISTICS_NAME_SPEC"), dict):
+        desc = _get_text(table_inf["STATISTICS_NAME_SPEC"].get("DESCRIPTION", ""))
+        if desc:
+            meta["description"] = desc
+    return meta
 
-    # CSVカラム情報
-    lines.append("## CSVカラム構成")
-    lines.append("")
-    lines.append("| # | カラム名 | 説明 |")
-    lines.append("|---|---------|------|")
-    col_num = 1
-    for dim_id in code_map:
-        name = class_names.get(dim_id, dim_id)
-        lines.append(f"| {col_num} | `{name}_code` | {name}のコード |")
-        col_num += 1
-        lines.append(f"| {col_num} | `{name}` | {name}の名称 |")
-        col_num += 1
-    lines.append(f"| {col_num} | `unit` | 単位 |")
-    col_num += 1
-    lines.append(f"| {col_num} | `value` | 値 |")
-    lines.append("")
 
-    # 分類情報の詳細
-    lines.append("## 分類情報")
-    lines.append("")
-    for dim_id, codes in code_map.items():
-        name = class_names.get(dim_id, dim_id)
-        lines.append(f"### {name} (`{dim_id}`)")
-        lines.append("")
-        count = len(codes)
-        if count <= 30:
-            lines.append("| コード | 名称 |")
-            lines.append("|--------|------|")
-            for code, label in codes.items():
-                lines.append(f"| `{code}` | {label} |")
+def write_column_summary(table_inf: dict, headers: list[str], rows: list[list[str]], output_dir: str) -> None:
+    """メタ情報とカラムごとのユニーク値を集計し、YAMLファイルとして保存する。"""
+    # メタ情報
+    output = {"meta": _build_meta_info(table_inf)}
+
+    # カラムごとのユニーク値集計
+    columns = {}
+    for col_idx, header in enumerate(headers):
+        unique_values = sorted(set(row[col_idx] for row in rows))
+        total = len(unique_values)
+        col_info = {"unique_count": total}
+        if total > 100:
+            col_info["note"] = "件数多数のためvalues値の一部を省略"
+            col_info["values"] = unique_values[:90] + ["..."] + unique_values[-10:]
         else:
-            # 件数が多い場合は先頭・末尾のみ表示
-            items = list(codes.items())
-            lines.append(f"全{count}件（先頭10件・末尾5件を表示）")
-            lines.append("")
-            lines.append("| コード | 名称 |")
-            lines.append("|--------|------|")
-            for code, label in items[:10]:
-                lines.append(f"| `{code}` | {label} |")
-            lines.append("| ... | ... |")
-            for code, label in items[-5:]:
-                lines.append(f"| `{code}` | {label} |")
-        lines.append("")
+            col_info["values"] = unique_values
+        columns[header] = col_info
+    output["columns"] = columns
 
-    desc_path = os.path.join(output_dir, "description.md")
-    with open(desc_path, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines))
-    print(f"保存しました: {desc_path}", file=sys.stderr)
+    # 全値を文字列として統一的にクォートするカスタムDumper
+    class StrDumper(yaml.SafeDumper):
+        pass
+
+    def _str_representer(dumper, data):
+        return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="'")
+
+    StrDumper.add_representer(str, _str_representer)
+
+    yaml_path = os.path.join(output_dir, "column_summary.yml")
+    with open(yaml_path, "w", encoding="utf-8") as f:
+        yaml.dump(output, f, Dumper=StrDumper, allow_unicode=True, default_flow_style=False, sort_keys=False)
+    print(f"保存しました: {yaml_path}", file=sys.stderr)
 
 
 def fetch_stats_data(app_id: str, stats_data_id: str) -> list[dict]:
@@ -297,9 +263,6 @@ def main():
     print(f"メタ情報を取得中...", file=sys.stderr)
     code_map, class_names, table_inf = fetch_meta(app_id, stats_data_id)
 
-    # description.md を生成
-    write_description(table_inf, code_map, class_names, output_dir)
-
     print(f"統計データを取得中...", file=sys.stderr)
     values = fetch_stats_data(app_id, stats_data_id)
     print(f"合計 {len(values)} 件取得", file=sys.stderr)
@@ -312,6 +275,9 @@ def main():
         writer.writerows(rows)
 
     print(f"保存しました: {output}", file=sys.stderr)
+
+    # カラムサマリーYAMLを生成（メタ情報 + カラムユニーク値）
+    write_column_summary(table_inf, headers, rows, output_dir)
 
 
 if __name__ == "__main__":

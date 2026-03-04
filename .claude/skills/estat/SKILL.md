@@ -86,8 +86,8 @@ uv run python .claude/skills/estat/get_meta.py 0003317252 --json
 uv run python .claude/skills/estat/download_data.py 0003317252
 ```
 
-- デフォルトでは `data/{統計表ID}/` ディレクトリを作成し、CSVと `description.md` を保存
-- `description.md` にはAPIから取得した統計名・タイトル・提供機関・周期等の概要を記載
+- デフォルトでは `data/{統計表ID}/` ディレクトリを作成し、CSVと `column_summary.yml` を保存
+- `column_summary.yml` には統計の基本情報（統計名・提供機関・周期等）と各カラムのユニーク値一覧を記載（100件超の場合は先頭90件+末尾10件に省略）
 - ページネーション対応（10万件超のデータも自動で全件取得）
 - メタ情報から分類コード→名称のマッピングを自動解決
 - 出力CSVのカラム: `{分類名}_code`, `{分類名}`, ..., `unit`, `value`
