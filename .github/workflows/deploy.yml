@@ -23,6 +23,9 @@ jobs:
           python-version: '3.12'
       - name: Install dbt
         run: pip install dbt-core dbt-duckdb
+      - name: Install dbt packages
+        working-directory: dbt_project
+        run: dbt deps
       - name: Run dbt build
         working-directory: dbt_project
         run: dbt build

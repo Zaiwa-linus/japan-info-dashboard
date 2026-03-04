@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: int_wide_natural_env_vegetation
+    description: "自然環境 - 植生自然度の横持ちモデル。植生自然度1〜10の構成比を地域×年で横持ちにしたもの。自然度1（市街地等）〜10（自然植生）。"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - area_code
+            - year
+    columns:
+      - name: area_code
+        description: "都道府県コード"
+        tests:
+          - not_null
+      - name: area_name
+        description: "都道府県名"
+        tests:
+          - not_null
+      - name: year_code
+        description: "調査年コード"
+        tests:
+          - not_null
+      - name: year
+        description: "調査年（整数）"
+        tests:
+          - not_null
+      - name: vegetation_naturalness_1_pct
+        description: "B3101 植生自然度1（構成比 %）- 市街地等"
+      - name: vegetation_naturalness_2_pct
+        description: "B3102 植生自然度2（構成比 %）- 農耕地（水田・畑）"
+      - name: vegetation_naturalness_3_pct
+        description: "B3103 植生自然度3（構成比 %）- 農耕地（樹園地）"
+      - name: vegetation_naturalness_4_pct
+        description: "B3104 植生自然度4（構成比 %）- 二次草原（背の低い草原）"
+      - name: vegetation_naturalness_5_pct
+        description: "B3105 植生自然度5（構成比 %）- 二次草原（背の高い草原）"
+      - name: vegetation_naturalness_6_pct
+        description: "B3106 植生自然度6（構成比 %）- 植林地"
+      - name: vegetation_naturalness_7_pct
+        description: "B3107 植生自然度7（構成比 %）- 二次林（落葉広葉樹林等）"
+      - name: vegetation_naturalness_8_pct
+        description: "B3108 植生自然度8（構成比 %）- 二次林（常緑針葉樹林等）"
+      - name: vegetation_naturalness_9_pct
+        description: "B3109 植生自然度9（構成比 %）- 自然林"
+      - name: vegetation_naturalness_10_pct
+        description: "B3110 植生自然度10（構成比 %）- 自然植生"

@@ -1,0 +1,37 @@
+version: 2
+
+models:
+  - name: int_wide_natural_env_parks
+    description: "自然環境 - 自然公園の横持ちモデル。自然公園面積、都道府県立自然公園数・面積、国立公園面積、国定公園面積を地域×年で横持ちにしたもの。"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - area_code
+            - year
+    columns:
+      - name: area_code
+        description: "都道府県コード"
+        tests:
+          - not_null
+      - name: area_name
+        description: "都道府県名"
+        tests:
+          - not_null
+      - name: year_code
+        description: "調査年コード"
+        tests:
+          - not_null
+      - name: year
+        description: "調査年（整数）"
+        tests:
+          - not_null
+      - name: natural_park_area_ha
+        description: "B2101 自然公園面積（ha）"
+      - name: prefectural_park_count
+        description: "B2102 都道府県立自然公園数（箇所）"
+      - name: prefectural_park_area_ha
+        description: "B2103 都道府県立自然公園面積（ha）"
+      - name: national_park_area_ha
+        description: "B2104 国立公園面積（ha）"
+      - name: quasi_national_park_area_ha
+        description: "B2105 国定公園面積（ha）"
