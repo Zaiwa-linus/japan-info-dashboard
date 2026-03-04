@@ -1,6 +1,6 @@
 -- 社会・人口統計体系 - Ｂ 自然環境（都道府県別）
 with source as (
-    select * from {{ source('estat', '0000010102') }}
+    select * from read_csv('../data/0000010102/0000010102.csv', nullstr = '-', auto_detect = true)
 )
 
 select

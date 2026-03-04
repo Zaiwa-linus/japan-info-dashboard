@@ -140,6 +140,10 @@ where nationality_code = '60000'
 ## 詳細ページ
 
 <div class="nav-grid">
+    <a class="nav-card" href="/japan-info-dashboard/prefecture-profile">
+        <h4>都道府県プロフィール</h4>
+        <p>都道府県を選んで人口・自然環境・経済の全体像を一覧</p>
+    </a>
     <a class="nav-card" href="/japan-info-dashboard/population">
         <h4>都道府県別人口</h4>
         <p>都道府県別の総人口マップと前年比較</p>

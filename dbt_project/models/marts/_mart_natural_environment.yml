@@ -1,0 +1,100 @@
+version: 2
+
+models:
+  - name: mart_natural_environment
+    description: "自然環境データ（土地面積・公園・植生自然度・気候）を都道府県×年で結合したマート。全国行を除外済み。"
+    columns:
+      - name: area_code
+        description: "都道府県コード"
+      - name: area_name
+        description: "都道府県名"
+      - name: year
+        description: "調査年（整数）"
+      - name: total_area_excl_northern_ha
+        description: "総面積（北方地域を除く）（ha）"
+      - name: total_area_incl_northern_ha
+        description: "総面積（北方地域を含む）（ha）"
+      - name: habitable_area_ha
+        description: "可住地面積（ha）"
+      - name: major_lake_area_ha
+        description: "主要湖沼面積（ha）"
+      - name: forest_and_field_area_ha
+        description: "林野面積（ha）"
+      - name: forest_area_ha
+        description: "森林面積（ha）"
+      - name: grassland_area_ha
+        description: "原野面積（ha）"
+      - name: nature_conservation_area_ha
+        description: "自然保護地域面積（ha）"
+      - name: assessed_land_total_m2
+        description: "地積合計（m2）"
+      - name: assessed_land_paddy_m2
+        description: "地積 田（m2）"
+      - name: assessed_land_field_m2
+        description: "地積 畑（m2）"
+      - name: assessed_land_residential_m2
+        description: "地積 宅地（m2）"
+      - name: assessed_land_mountain_m2
+        description: "地積 山林（m2）"
+      - name: assessed_land_pasture_m2
+        description: "地積 牧場（m2）"
+      - name: assessed_land_wasteland_m2
+        description: "地積 原野（m2）"
+      - name: assessed_land_other_m2
+        description: "地積 その他（m2）"
+      - name: afforestation_area_ha
+        description: "造林面積（ha）"
+      - name: natural_park_area_ha
+        description: "自然公園面積（ha）"
+      - name: prefectural_park_count
+        description: "都道府県立自然公園数（箇所）"
+      - name: prefectural_park_area_ha
+        description: "都道府県立自然公園面積（ha）"
+      - name: national_park_area_ha
+        description: "国立公園面積（ha）"
+      - name: quasi_national_park_area_ha
+        description: "国定公園面積（ha）"
+      - name: vegetation_naturalness_1_pct
+        description: "植生自然度1（市街地等）（%）"
+      - name: vegetation_naturalness_2_pct
+        description: "植生自然度2（農耕地・水田畑）（%）"
+      - name: vegetation_naturalness_3_pct
+        description: "植生自然度3（農耕地・樹園地）（%）"
+      - name: vegetation_naturalness_4_pct
+        description: "植生自然度4（二次草原・背の低い草原）（%）"
+      - name: vegetation_naturalness_5_pct
+        description: "植生自然度5（二次草原・背の高い草原）（%）"
+      - name: vegetation_naturalness_6_pct
+        description: "植生自然度6（植林地）（%）"
+      - name: vegetation_naturalness_7_pct
+        description: "植生自然度7（二次林・落葉広葉樹林等）（%）"
+      - name: vegetation_naturalness_8_pct
+        description: "植生自然度8（二次林・常緑針葉樹林等）（%）"
+      - name: vegetation_naturalness_9_pct
+        description: "植生自然度9（自然林）（%）"
+      - name: vegetation_naturalness_10_pct
+        description: "植生自然度10（自然植生）（%）"
+      - name: avg_temperature_celsius
+        description: "年平均気温（℃）"
+      - name: max_temperature_celsius
+        description: "最高気温（℃）"
+      - name: min_temperature_celsius
+        description: "最低気温（℃）"
+      - name: clear_sky_days
+        description: "快晴日数（日）"
+      - name: cloudy_days
+        description: "曇天日数（日）"
+      - name: rainy_days
+        description: "雨天日数（日）"
+      - name: snow_days
+        description: "雪日数（日）"
+      - name: sunshine_hours
+        description: "日照時間（時間）"
+      - name: precipitation_mm
+        description: "年間降水量（mm）"
+      - name: max_snow_depth_cm
+        description: "最深積雪（cm）"
+      - name: avg_relative_humidity_pct
+        description: "平均相対湿度（%）"
+      - name: min_relative_humidity_pct
+        description: "最小相対湿度（%）"
