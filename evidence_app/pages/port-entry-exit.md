@@ -1,5 +1,6 @@
 ---
 title: 空港・港別 出入国者数
+sidebar_position: 6
 ---
 
 # 空港・港別 出入国者数

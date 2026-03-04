@@ -1,5 +1,6 @@
 ---
 title: 小売業態別 販売動向
+sidebar_position: 7
 ---
 
 # 小売業態別 販売動向

@@ -1,5 +1,6 @@
 ---
 title: 都道府県別人口
+sidebar_position: 2
 ---
 
 # 都道府県別人口
@@ -43,7 +44,7 @@ order by total_population desc
 
 <AreaMap
     data={population_total}
-    geoJsonUrl=japan_prefectures.geojson
+    geoJsonUrl=/japan-info-dashboard/japan_prefectures.geojson
     geoId=nam_ja
     areaCol=area_name
     value=total_population
@@ -85,7 +86,7 @@ order by change desc
 
 <AreaMap
     data={yoy_comparison}
-    geoJsonUrl=japan_prefectures.geojson
+    geoJsonUrl=/japan-info-dashboard/japan_prefectures.geojson
     geoId=nam_ja
     areaCol=area_name
     value=change
