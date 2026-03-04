@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: stg_consumer_price_index
-    description: "小売物価統計調査 - 都道府県別 消費者物価地域差指数（10大費目別）。2013〜2024年の都道府県・地方別データ。"
+    description: "小売物価統計調査 - 消費者物価地域差指数（10大費目別）。都道府県別の物価水準を整形したステージングモデル。"
     columns:
       - name: item_code
         description: "表章項目コード"
@@ -18,21 +18,78 @@ models:
         description: "10大費目コード"
         tests:
           - accepted_values:
-              values: ["00010", "00020", "00030", "00040", "00050", "00060", "00070", "00080", "00090", "00100", "00110", "00120"]
+              values:
+                - "00010"
+                - "00020"
+                - "00030"
+                - "00040"
+                - "00050"
+                - "00060"
+                - "00070"
+                - "00080"
+                - "00090"
+                - "00100"
+                - "00110"
+                - "00120"
       - name: expense_category_name
-        description: "10大費目名称（総合、食料、住居、光熱・水道 等）"
+        description: "10大費目の名称"
         tests:
           - accepted_values:
-              values: ["総合", "食料", "住居", "光熱・水道", "家具・家事用品", "被服及び履物", "保健医療", "交通・通信", "教育", "教養娯楽", "諸雑費", "(参考)家賃を除く総合"]
+              values:
+                - "(参考)家賃を除く総合"
+                - "交通・通信"
+                - "住居"
+                - "保健医療"
+                - "光熱・水道"
+                - "家具・家事用品"
+                - "教育"
+                - "教養娯楽"
+                - "総合"
+                - "被服及び履物"
+                - "諸雑費"
+                - "食料"
       - name: area_code
-        description: "地域コード（全国・都道府県・県庁所在市・地方ブロック）"
+        description: "地域コード（110種類のため accepted_values テスト対象外）"
       - name: area_name
-        description: "地域名称"
+        description: "地域名（110種類のため accepted_values テスト対象外）"
       - name: year_code
         description: "年次コード"
+        tests:
+          - accepted_values:
+              values:
+                - "2013000000"
+                - "2014000000"
+                - "2015000000"
+                - "2016000000"
+                - "2017000000"
+                - "2018000000"
+                - "2019000000"
+                - "2020000000"
+                - "2021000000"
+                - "2022000000"
+                - "2023000000"
+                - "2024000000"
       - name: year_name
-        description: "年次の表示名称（例: 2024年）"
+        description: "年次の表示名称"
+        tests:
+          - accepted_values:
+              values:
+                - "2013年"
+                - "2014年"
+                - "2015年"
+                - "2016年"
+                - "2017年"
+                - "2018年"
+                - "2019年"
+                - "2020年"
+                - "2021年"
+                - "2022年"
+                - "2023年"
+                - "2024年"
       - name: unit_name
         description: "値の単位"
+        tests:
+          - accepted_values:
+              values: [""]
       - name: raw_value
-        description: "消費者物価地域差指数（double型にキャスト済み）"
+        description: "指標の数値（型キャスト済み）"

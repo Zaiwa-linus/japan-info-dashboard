@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: stg_ship_tourism_landing
-    description: "出入国管理統計 - 船舶観光上陸許可（国籍・港別）。2016〜2024年の国籍・地域別、港別データ。"
+    description: "出入国管理統計 - 船舶観光上陸許可（国籍・港別）。クルーズ船による観光上陸者数を整形したステージングモデル。"
     columns:
       - name: item_code
         description: "表章項目コード"
@@ -15,21 +15,119 @@ models:
           - accepted_values:
               values: ["船舶観光上陸許可を受けた外国人"]
       - name: nationality_code
-        description: "国籍・地域コード"
+        description: "国籍・地域コード（177種類のため accepted_values テスト対象外）"
       - name: nationality_name
-        description: "国籍・地域名称"
+        description: "国籍・地域の名称（177種類のため accepted_values テスト対象外）"
       - name: port_code
         description: "港コード"
+        tests:
+          - accepted_values:
+              values:
+                - "50000"
+                - "50130"
+                - "50160"
+                - "50170"
+                - "50180"
+                - "50320"
+                - "50380"
+                - "50580"
+                - "50600"
+                - "50740"
+                - "50850"
+                - "50980"
+                - "51090"
+                - "51270"
+                - "51280"
+                - "51410"
+                - "51530"
+                - "51810"
+                - "51880"
+                - "52170"
+                - "52310"
+                - "52340"
+                - "52350"
+                - "52370"
+                - "52470"
+                - "52620"
+                - "52630"
+                - "52670"
+                - "52700"
+                - "52710"
+                - "52860"
+                - "52890"
+                - "52900"
+                - "53020"
       - name: port_name
-        description: "港名称"
+        description: "港の名称"
+        tests:
+          - accepted_values:
+              values:
+                - "佐世保"
+                - "八代"
+                - "函館"
+                - "博多"
+                - "名古屋"
+                - "唐津"
+                - "境"
+                - "大阪"
+                - "室蘭"
+                - "小樽"
+                - "平良"
+                - "広島"
+                - "新潟"
+                - "東京"
+                - "横浜"
+                - "油津"
+                - "清水"
+                - "石垣"
+                - "神戸"
+                - "秋田船川"
+                - "細島"
+                - "総数"
+                - "舞鶴"
+                - "那覇"
+                - "金武中城"
+                - "金沢"
+                - "釧路"
+                - "長崎"
+                - "関門(下関)"
+                - "関門(戸畑)"
+                - "関門(門司)"
+                - "青森"
+                - "高知"
+                - "鹿児島"
       - name: year_code
         description: "年次コード"
+        tests:
+          - accepted_values:
+              values:
+                - "2016000000"
+                - "2017000000"
+                - "2018000000"
+                - "2019000000"
+                - "2020000000"
+                - "2021000000"
+                - "2022000000"
+                - "2023000000"
+                - "2024000000"
       - name: year_name
-        description: "年次の表示名称（例: 2024年）"
+        description: "年次の表示名称"
+        tests:
+          - accepted_values:
+              values:
+                - "2016年"
+                - "2017年"
+                - "2018年"
+                - "2019年"
+                - "2020年"
+                - "2021年"
+                - "2022年"
+                - "2023年"
+                - "2024年"
       - name: unit_name
         description: "値の単位"
         tests:
           - accepted_values:
               values: ["人"]
       - name: raw_value
-        description: "船舶観光上陸許可者数（bigint型にキャスト済み）"
+        description: "指標の数値（型キャスト済み）"

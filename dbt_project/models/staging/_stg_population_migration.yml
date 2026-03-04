@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: stg_population_migration
-    description: "住民基本台帳人口移動報告 - 移動前の住所地別転入者数。2024年の都道府県・市区町村別データ。"
+    description: "住民基本台帳人口移動報告 - 移動前の住所地別転入者数。市区町村間の人口移動データを整形したステージングモデル。"
     columns:
       - name: item_code
         description: "表章項目コード"
@@ -15,23 +15,23 @@ models:
           - accepted_values:
               values: ["移動前の住所地別転入者数"]
       - name: current_address_code
-        description: "移動後の住所地（現住地）コード"
+        description: "移動後の住所地コード（1960種類のため accepted_values テスト対象外）"
       - name: current_address_name
-        description: "移動後の住所地（現住地）名称"
+        description: "移動後の住所地名称（1866種類のため accepted_values テスト対象外）"
       - name: nationality_code
-        description: "国籍区分コード（移動者・日本人移動者・外国人移動者）"
+        description: "国籍コード"
         tests:
           - accepted_values:
               values: ["60000", "61000", "62000"]
       - name: nationality_name
-        description: "国籍区分名称"
+        description: "国籍の名称"
         tests:
           - accepted_values:
-              values: ["移動者", "日本人移動者", "外国人移動者"]
+              values: ["外国人移動者", "日本人移動者", "移動者"]
       - name: previous_address_code
-        description: "移動前の住所地（前住地）コード"
+        description: "移動前の住所地コード（1832種類のため accepted_values テスト対象外）"
       - name: previous_address_name
-        description: "移動前の住所地（前住地）名称"
+        description: "移動前の住所地名称（1681種類のため accepted_values テスト対象外）"
       - name: year_code
         description: "年次コード"
         tests:
@@ -48,4 +48,4 @@ models:
           - accepted_values:
               values: ["人"]
       - name: raw_value
-        description: "転入者数（bigint型にキャスト済み）"
+        description: "指標の数値（型キャスト済み）"
