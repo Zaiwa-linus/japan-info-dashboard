@@ -1,10 +1,10 @@
 """e-Stat API で統計表を検索し、一覧表示するスクリプト。
 
 使い方:
-  python Estat/search_stats.py "人口"
-  python Estat/search_stats.py "GDP" --field 07        # 統計分野で絞り込み
-  python Estat/search_stats.py "労働" --limit 20       # 取得件数指定
-  python Estat/search_stats.py --list-fields            # 統計分野コード一覧を表示
+  python .claude/skills/estat/search_stats.py "人口"
+  python .claude/skills/estat/search_stats.py "GDP" --field 07        # 統計分野で絞り込み
+  python .claude/skills/estat/search_stats.py "労働" --limit 20       # 取得件数指定
+  python .claude/skills/estat/search_stats.py --list-fields            # 統計分野コード一覧を表示
 """
 
 import argparse
@@ -43,7 +43,7 @@ def get_app_id() -> str:
     app_id = os.environ.get("ESTAT_API_APPID")
     if not app_id:
         # .env ファイルからも試す
-        env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
+        env_path = os.path.join(os.path.dirname(__file__), "..", "..", "..", ".env")
         if os.path.exists(env_path):
             with open(env_path) as f:
                 for line in f:
@@ -147,10 +147,10 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 使用例:
-  python Estat/search_stats.py "人口"
-  python Estat/search_stats.py "GDP" --field 07
-  python Estat/search_stats.py "労働力" --years 2023
-  python Estat/search_stats.py --list-fields
+  python .claude/skills/estat/search_stats.py "人口"
+  python .claude/skills/estat/search_stats.py "GDP" --field 07
+  python .claude/skills/estat/search_stats.py "労働力" --years 2023
+  python .claude/skills/estat/search_stats.py --list-fields
         """,
     )
     parser.add_argument("keyword", nargs="?", help="検索キーワード")

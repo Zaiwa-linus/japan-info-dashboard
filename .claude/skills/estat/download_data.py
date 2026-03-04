@@ -1,8 +1,8 @@
 """e-Stat API から統計データを取得し、CSVとして保存するスクリプト。
 
 使い方:
-  python Estat/download_data.py 0003317114
-  python Estat/download_data.py 0003317114 -o data/custom_dir/data.csv
+  python .claude/skills/estat/download_data.py 0003317114
+  python .claude/skills/estat/download_data.py 0003317114 -o data/custom_dir/data.csv
 
 デフォルトでは data/{統計表ID}/ ディレクトリを作成し、
 その中に {統計表ID}.csv と description.md を保存する。
@@ -23,7 +23,7 @@ META_URL = "https://api.e-stat.go.jp/rest/3.0/app/json/getMetaInfo"
 def get_app_id() -> str:
     app_id = os.environ.get("ESTAT_API_APPID")
     if not app_id:
-        env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
+        env_path = os.path.join(os.path.dirname(__file__), "..", "..", "..", ".env")
         if os.path.exists(env_path):
             with open(env_path) as f:
                 for line in f:

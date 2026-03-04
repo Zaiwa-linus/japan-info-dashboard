@@ -1,8 +1,8 @@
 """e-Stat API で統計表のメタ情報（分類軸・コード一覧）を取得するスクリプト。
 
 使い方:
-  python Estat/get_meta.py 0003317252
-  python Estat/get_meta.py 0003317252 --json
+  python .claude/skills/estat/get_meta.py 0003317252
+  python .claude/skills/estat/get_meta.py 0003317252 --json
 """
 
 import argparse
@@ -18,7 +18,7 @@ BASE_URL = "https://api.e-stat.go.jp/rest/3.0/app/json/getMetaInfo"
 def get_app_id() -> str:
     app_id = os.environ.get("ESTAT_API_APPID")
     if not app_id:
-        env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
+        env_path = os.path.join(os.path.dirname(__file__), "..", "..", "..", ".env")
         if os.path.exists(env_path):
             with open(env_path) as f:
                 for line in f:
