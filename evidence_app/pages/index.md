@@ -93,7 +93,7 @@ where nationality_code = '60000'
             comparisonTitle="前年比"
             comparisonFmt=num0
             downIsGood=false
-            link=/japan-info-dashboard/population
+            link=/japan-info-dashboard/01-demographics/population
         />
     </div>
     <div class="card">
@@ -102,7 +102,7 @@ where nationality_code = '60000'
             value=total_births
             title="出生数"
             fmt=num0
-            link=/japan-info-dashboard/birth-death
+            link=/japan-info-dashboard/01-demographics/birth-death
         />
     </div>
     <div class="card">
@@ -111,7 +111,7 @@ where nationality_code = '60000'
             value=total_deaths
             title="死亡数"
             fmt=num0
-            link=/japan-info-dashboard/birth-death
+            link=/japan-info-dashboard/01-demographics/birth-death
         />
     </div>
     <div class="card">
@@ -120,7 +120,7 @@ where nationality_code = '60000'
             value=natural_change
             title="自然増減"
             fmt=num0
-            link=/japan-info-dashboard/birth-death
+            link=/japan-info-dashboard/01-demographics/birth-death
         />
     </div>
     <div class="card">
@@ -129,7 +129,7 @@ where nationality_code = '60000'
             value=total_migrants
             title="転入者数（2024年）"
             fmt=num0
-            link=/japan-info-dashboard/population-migration
+            link=/japan-info-dashboard/01-demographics/population-migration
         />
     </div>
 </div>
@@ -143,31 +143,31 @@ where nationality_code = '60000'
         <h4>都道府県プロフィール</h4>
         <p>都道府県を選んで人口・自然環境・経済の全体像を一覧</p>
     </a>
-    <a class="nav-card" href="/japan-info-dashboard/population">
+    <a class="nav-card" href="/japan-info-dashboard/01-demographics/population">
         <h4>都道府県別人口</h4>
         <p>都道府県別の総人口マップと前年比較</p>
     </a>
-    <a class="nav-card" href="/japan-info-dashboard/birth-death">
+    <a class="nav-card" href="/japan-info-dashboard/01-demographics/birth-death">
         <h4>出生・死亡者数</h4>
         <p>都道府県別の出生児数・死亡者数と自然増減</p>
     </a>
-    <a class="nav-card" href="/japan-info-dashboard/population-migration">
+    <a class="nav-card" href="/japan-info-dashboard/01-demographics/population-migration">
         <h4>転入者数</h4>
         <p>都道府県別の転入者数と移動前住所地の構成</p>
     </a>
-    <a class="nav-card" href="/japan-info-dashboard/durable-goods">
+    <a class="nav-card" href="/japan-info-dashboard/03-economy/durable-goods">
         <h4>耐久消費財の普及状況</h4>
         <p>都道府県別の主要耐久消費財の普及率</p>
     </a>
-    <a class="nav-card" href="/japan-info-dashboard/retail-sales">
+    <a class="nav-card" href="/japan-info-dashboard/03-economy/retail-sales">
         <h4>小売業態別 販売動向</h4>
         <p>コンビニ・家電・ドラッグストア・ホームセンターの月次販売額</p>
     </a>
-    <a class="nav-card" href="/japan-info-dashboard/immigration">
+    <a class="nav-card" href="/japan-info-dashboard/02-international/immigration">
         <h4>新規入国外国人</h4>
         <p>国籍別・入国目的別の新規入国外国人数の推移</p>
     </a>
-    <a class="nav-card" href="/japan-info-dashboard/port-entry-exit">
+    <a class="nav-card" href="/japan-info-dashboard/02-international/port-entry-exit">
         <h4>空港・港別 出入国者数</h4>
         <p>空港・港別の出入国者数の推移</p>
     </a>
