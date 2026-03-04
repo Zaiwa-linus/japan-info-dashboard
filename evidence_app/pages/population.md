@@ -1,5 +1,6 @@
 ---
 title: 都道府県別人口
+sidebar_position: 2
 ---
 
 # 都道府県別人口

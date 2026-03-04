@@ -1,5 +1,6 @@
 ---
 title: 都道府県別 転入者数
+sidebar_position: 4
 ---
 
 # 都道府県別 転入者数

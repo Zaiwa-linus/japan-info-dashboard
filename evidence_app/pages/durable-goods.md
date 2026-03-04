@@ -1,5 +1,6 @@
 ---
 title: 耐久消費財の普及状況
+sidebar_position: 8
 ---
 
 # 耐久消費財の普及状況

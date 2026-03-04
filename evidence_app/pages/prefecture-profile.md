@@ -1,5 +1,6 @@
 ---
 title: 都道府県プロフィール
+sidebar_position: 1
 ---
 
 <style>
@@ -22,16 +23,16 @@ title: 都道府県プロフィール
 都道府県を選択すると、人口・自然環境・経済の主要データを一覧できます。
 
 ```sql prefectures
-select distinct area_name
+select distinct area_name, area_code
 from japan_stats.mart_population
-order by area_name
+order by area_code
 ```
 
 <Dropdown data={prefectures} name=selected_pref value=area_name defaultValue="東京都" />
 
 ---
 
-## 基本情報
+## 基本情報（2024年）
 
 ```sql pop_data
 select
@@ -64,7 +65,7 @@ where current_address_name = '${inputs.selected_pref.value}'
 
 <div class="card-grid">
     <div class="card">
-        <BigValue data={pop_data} value=total_population title="総人口（2024年）" fmt=num0 />
+        <BigValue data={pop_data} value=total_population title="総人口" fmt=num0 />
     </div>
     <div class="card">
         <BigValue data={birth_death_data} value=birth_count title="出生数" fmt=num0 />
@@ -85,14 +86,14 @@ where current_address_name = '${inputs.selected_pref.value}'
 ## 自然環境
 
 ```sql env_data
-select *
+select *, year as env_year
 from japan_stats.mart_natural_environment
 where area_name = '${inputs.selected_pref.value}'
 order by year desc
 limit 1
 ```
 
-### 土地
+### 土地（{env_data[0].env_year}年度）
 
 <div class="card-grid">
     <div class="card">
@@ -106,7 +107,7 @@ limit 1
     </div>
 </div>
 
-### 気候
+### 気候（{env_data[0].env_year}年度）
 
 <div class="card-grid">
     <div class="card">
@@ -123,7 +124,7 @@ limit 1
     </div>
 </div>
 
-### 公園
+### 公園（{env_data[0].env_year}年度）
 
 <div class="card-grid">
     <div class="card">
@@ -144,14 +145,14 @@ limit 1
 
 ```sql vegetation_all
 with latest as (
-    select *
+    select *, year as veg_year
     from japan_stats.mart_natural_environment
     where area_name = '${inputs.selected_pref.value}'
         and vegetation_naturalness_1_pct is not null
     order by year desc
     limit 1
 )
-select unnest.category, unnest.value
+select unnest.category, unnest.value, veg_year
 from latest,
 lateral (values
     ('1: 市街地等', vegetation_naturalness_1_pct),
@@ -171,16 +172,17 @@ lateral (values
     data={vegetation_all}
     x=category
     y=value
-    title="{inputs.selected_pref.value} の植生自然度構成（%）"
-    yAxisTitle="%"
-    xAxisTitle="自然度"
+    title="{inputs.selected_pref.value} の植生自然度構成（{vegetation_all[0].veg_year}年度・%）"
+    swapXY=true
     sort=false
+    xAxisTitle="自然度"
+    yAxisTitle="%"
     yFmt=num1
 />
 
 ---
 
-## 人口動態
+## 人口動態（2023年10月〜2024年9月）
 
 ### 出生・死亡（性別内訳）
 
@@ -205,10 +207,11 @@ order by gender_name
     title="{inputs.selected_pref.value} の出生児数・死亡者数（性別）"
     yAxisTitle="人数（人）"
     type=grouped
+    swapXY=true
     yFmt=num0
 />
 
-### 転入元 Top 10
+### 転入元 Top 10（2024年）
 
 ```sql migration_from
 select
@@ -262,25 +265,7 @@ order by year_month
     yFmt=num0
 />
 
-### 耐久消費財（全国平均との比較）
-
-```sql durable_comparison
-select
-    d.indicator_short_name,
-    d.raw_value as pref_value,
-    n.raw_value as national_value
-from japan_stats.mart_durable_goods d
-left join (
-    select indicator_code, raw_value
-    from japan_stats.mart_durable_goods
-    where area_name = '全国'
-    order by year desc
-    limit 100
-) n on d.indicator_code = n.indicator_code
-where d.area_name = '${inputs.selected_pref.value}'
-    and d.raw_value is not null
-order by d.year desc, d.indicator_short_name
-```
+### 耐久消費財（全国平均との比較・最新年）
 
 ```sql durable_latest
 select
@@ -311,9 +296,10 @@ order by d.indicator_short_name
     x=indicator_short_name
     y={["pref_value", "national_value"]}
     seriesNames={["{inputs.selected_pref.value}", "全国平均"]}
-    title="耐久消費財 普及率（千世帯あたり・最新年）"
+    title="耐久消費財 普及率（千世帯あたり）"
     yAxisTitle="千世帯あたり所有数量"
     type=grouped
+    swapXY=true
     yFmt=num0
 />
 
