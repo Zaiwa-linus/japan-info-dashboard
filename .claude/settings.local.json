@@ -15,7 +15,8 @@
       "Bash(uv run python .claude/skills/dbt/*.py)",
       "Bash(uv run dbt test)",
       "Bash(gh issue list --state open)",
-      "Bash(npm run build)"
+      "Bash(npm run build)",
+      "Bash(uv run dbt run)"
     ]
   }
 }

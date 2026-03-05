@@ -163,6 +163,10 @@ where nationality_code = '60000'
         <h4>小売業態別 販売動向</h4>
         <p>コンビニ・家電・ドラッグストア・ホームセンターの月次販売額</p>
     </a>
+    <a class="nav-card" href="/japan-info-dashboard/04-environment/climate">
+        <h4>気候</h4>
+        <p>都道府県の気候指標（気温・降水量・日照時間等）の推移と全国比較</p>
+    </a>
     <a class="nav-card" href="/japan-info-dashboard/02-international/immigration">
         <h4>新規入国外国人</h4>
         <p>国籍別・入国目的別の新規入国外国人数の推移</p>
