@@ -116,7 +116,87 @@ intermediate/
     └── _int_{名前}.yml
 ```
 
-### 2.2 SQL 冒頭コメント（必須）
+### 2.2 ITM 設計ルール（必須）
+
+Intermediate 層のモデルは **他のモデルやダッシュボードから流用される前提** で設計する。
+以下のルールを厳守すること。
+
+#### ルール1: NULL 値の完全排除
+
+ITM の出力に **NULL 値は一切許容しない**。
+
+- staging からのデータに NULL が含まれる場合は、`WHERE ... IS NOT NULL` で除外するか、`COALESCE` で既定値を埋めること
+- **横持ち変換時の NULL も禁止**（ルール3参照）
+
+```sql
+-- OK: NULL 行を除外
+select * from {{ ref('stg_xxx') }}
+where raw_value is not null
+
+-- NG: NULL が残ったまま出力
+select * from {{ ref('stg_xxx') }}
+```
+
+#### ルール2: 指標区分をユニークキーに含めない
+
+ユニークキーに **指標の種類（売上・利益・損失 等）を区分として持つことを禁止** する。
+指標が複数ある場合は **横持ち（ピボット）** にすること。
+
+```sql
+-- NG: 指標名がキーの一部になっている（縦持ち）
+-- ユニークキー: area_code, year_month, indicator_name
+select area_code, year_month, indicator_name, value
+from ...
+
+-- OK: 指標を列に展開（横持ち）
+-- ユニークキー: area_code, year_month
+select
+    area_code,
+    year_month,
+    max(case when indicator_name = '売上' then value end) as sales_value,
+    max(case when indicator_name = '利益' then value end) as profit_value
+from ...
+group by area_code, year_month
+```
+
+#### ルール3: 横持ち時のデータ期間不一致はモデルを分離する
+
+横持ちにした結果、指標間でデータの存在期間が異なり NULL が発生する場合は、**モデル自体を分けること**。
+
+```
+-- NG: 売上は3年分、損失は2年分 → 損失列に NULL が発生する
+int_wide_xxx.sql  (売上 + 損失を1テーブルに横持ち)
+
+-- OK: データ期間が揃わないならモデルを分離
+int_wide_xxx_sales.sql   (売上のみ、3年分)
+int_wide_xxx_loss.sql    (損失のみ、2年分)
+```
+
+同じテーマのデータでも、期間が揃う指標同士だけを1つの横持ちモデルにまとめること。
+
+#### ルール4: 月次データの日付型
+
+月次データは **`DATE` 型（月初日固定）** で保持する。列名は `year_month` とする。
+
+```sql
+-- staging の year / month から DATE 型を生成する例
+make_date(year::int, month::int, 1) as year_month
+
+-- time_code (例: '2024000101') から生成する例
+make_date(
+    substring(time_code, 1, 4)::int,
+    substring(time_code, 7, 2)::int,
+    1
+) as year_month
+```
+
+- `DATE` 型にすることでソート・フィルタ・日付関数・Evidence チャート軸すべてに対応できる
+- 年のみのデータは引き続き `INTEGER` 型の `year` 列を使用する
+- `year_month` は列名サフィックスルールの例外として許容する
+
+---
+
+### 2.3 SQL 冒頭コメント（必須）
 
 intermediate / marts の SQL ファイルは、冒頭5行以内に**モデルの責務**と**ユニークキー**を明示すること。
 
@@ -132,7 +212,7 @@ intermediate / marts の SQL ファイルは、冒頭5行以内に**モデルの
 | `[ユニークキー]` | 出力テーブルの1行を一意に特定する列の組み合わせ |
 | `[入力]` | ref で参照する上流モデル名（任意だが推奨） |
 
-### 2.3 prep（前処理）
+### 2.4 prep（前処理）
 
 **ビジネスロジックを含まない**、データの構造的な変換に使用する。
 
@@ -158,7 +238,7 @@ union all
 select * from fy2023
 ```
 
-### 2.4 logic（ビジネスロジック）
+### 2.5 logic（ビジネスロジック）
 
 ビジネス上の判断や分類を伴う変換に使用する。
 
@@ -182,7 +262,7 @@ select
 from {{ ref('int_prep_immigration') }}
 ```
 
-### 2.4 命名規則
+### 2.6 命名規則
 
 | ディレクトリ | SQL ファイル | YAML ファイル |
 |-------------|-------------|--------------|
