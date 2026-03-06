@@ -7,7 +7,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - area_code
-            - year
+            - survey_year
     columns:
       - name: area_code
         description: "都道府県コード"
@@ -21,7 +21,7 @@ models:
         description: "調査年コード"
         tests:
           - not_null
-      - name: year
+      - name: survey_year
         description: "調査年（整数）"
         tests:
           - not_null

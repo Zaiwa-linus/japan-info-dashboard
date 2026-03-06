@@ -8,6 +8,8 @@ sources:
     tables:
       - name: "0000010102"
         description: "社会・人口統計体系 - Ｂ 自然環境（都道府県別）"
+        meta:
+          external_location: "read_csv('../data/0000010102/0000010102.csv', nullstr='-', auto_detect=true)"
         columns:
           - name: "観測値_code"
             description: "観測値の分類コード。1種類: 00001"

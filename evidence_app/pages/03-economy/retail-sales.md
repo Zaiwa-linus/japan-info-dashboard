@@ -44,11 +44,11 @@ select distinct store_type_name from japan_stats.mart_retail_sales order by stor
 ```
 
 ```sql months
-select distinct cast(year_month as varchar) as year_month, time_name from japan_stats.mart_retail_sales order by year_month desc
+select distinct cast(year_month as varchar) as year_month, period_raw_name from japan_stats.mart_retail_sales order by year_month desc
 ```
 
 <Dropdown data={store_type_names} name=selected_store value=store_type_name defaultValue="コンビニ" />
-<Dropdown data={months} name=selected_month value=year_month label=time_name />
+<Dropdown data={months} name=selected_month value=year_month label=period_raw_name />
 
 ```sql map_data
 select

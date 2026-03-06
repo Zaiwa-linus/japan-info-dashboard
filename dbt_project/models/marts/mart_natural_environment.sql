@@ -1,11 +1,11 @@
 -- [責務] 自然環境データ（土地・公園・植生・気候）を都道府県×年で結合する
--- [ユニークキー] area_code, year
+-- [ユニークキー] area_code, survey_year
 -- [入力] int_wide_natural_env_land, int_wide_natural_env_parks, int_wide_natural_env_vegetation, int_wide_natural_env_climate
 
 select
     land.area_code,
     land.area_name,
-    land.year,
+    land.survey_year,
     -- 土地
     land.total_area_excl_northern_ha,
     land.total_area_incl_northern_ha,
@@ -56,9 +56,9 @@ select
     climate.min_relative_humidity_pct
 from {{ ref('int_wide_natural_env_land') }} as land
 left join {{ ref('int_wide_natural_env_parks') }} as parks
-    on land.area_code = parks.area_code and land.year = parks.year
+    on land.area_code = parks.area_code and land.survey_year = parks.survey_year
 left join {{ ref('int_wide_natural_env_vegetation') }} as veg
-    on land.area_code = veg.area_code and land.year = veg.year
+    on land.area_code = veg.area_code and land.survey_year = veg.survey_year
 left join {{ ref('int_wide_natural_env_climate') }} as climate
-    on land.area_code = climate.area_code and land.year = climate.year
+    on land.area_code = climate.area_code and land.survey_year = climate.survey_year
 where land.area_code != '00000'

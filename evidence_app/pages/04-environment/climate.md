@@ -33,16 +33,16 @@ where indicator_code = '${inputs.selected_indicator.value}'
 ## {inputs.selected_pref.value} の推移
 
 ```sql trend_data
-select make_date(cast(year as integer), 1, 1) as year_date, value
+select make_date(cast(survey_year as integer), 1, 1) as survey_year_date, value
 from japan_stats.mart_climate
 where area_name = '${inputs.selected_pref.value}'
     and indicator_code = '${inputs.selected_indicator.value}'
-order by year_date
+order by survey_year_date
 ```
 
 <LineChart
     data={trend_data}
-    x=year_date
+    x=survey_year_date
     xFmt=yyyy
     y=value
     yAxisTitle="{selected_info[0].indicator_label}（{selected_info[0].unit}）"
@@ -53,19 +53,19 @@ order by year_date
 
 ## 全国マップ
 
-```sql map_year
-select max(year) as latest_year
+```sql map_survey_year
+select max(survey_year) as latest_survey_year
 from japan_stats.mart_climate
 where indicator_code = '${inputs.selected_indicator.value}'
 ```
 
-<small>※ {map_year[0].latest_year}年データ</small>
+<small>※ {map_survey_year[0].latest_survey_year}年データ</small>
 
 ```sql tile_data
 select area_code, area_name, value
 from japan_stats.mart_climate
 where indicator_code = '${inputs.selected_indicator.value}'
-    and year = (select max(year) from japan_stats.mart_climate where indicator_code = '${inputs.selected_indicator.value}')
+    and survey_year = (select max(survey_year) from japan_stats.mart_climate where indicator_code = '${inputs.selected_indicator.value}')
 ```
 
 <TileMap data={tile_data} selected="{inputs.selected_pref.value}" />

@@ -15,8 +15,8 @@ select
     "表側_集計項目_db" as side_item_name,
     "都道府県_code" as area_code,
     "都道府県" as area_name,
-    cast("時間軸_db_code" as varchar) as time_code,
-    "時間軸_db" as time_name,
+    cast("時間軸_db_code" as varchar) as period_raw_code,
+    "時間軸_db" as period_raw_name,
     '家電量販店' as store_type_name,
     try_cast(value as double) as raw_value
 from source

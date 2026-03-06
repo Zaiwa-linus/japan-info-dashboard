@@ -92,10 +92,10 @@ where current_address_name = '${inputs.selected_pref.value}'
 ---
 
 ```sql env_data
-select *, year as env_year
+select *, survey_year as env_year
 from japan_stats.mart_natural_environment
 where area_name = '${inputs.selected_pref.value}'
-order by year desc
+order by survey_year desc
 limit 1
 ```
 

@@ -16,7 +16,7 @@ models:
         description: "月（整数）"
       - name: year_month
         description: "年月（DATE型、各月1日）"
-      - name: time_name
+      - name: period_raw_name
         description: "時間軸の表示名称（例: 2024年1月）"
       - name: sales_amount
         description: "販売額（百万円）"

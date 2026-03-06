@@ -138,7 +138,7 @@ models:
                 - "高知県"
                 - "鳥取県"
                 - "鹿児島県"
-      - name: time_code
+      - name: period_raw_code
         description: "時間軸コード"
         tests:
           - accepted_values:
@@ -169,7 +169,7 @@ models:
                 - "2024001111"
                 - "2024001212"
                 - "2025000101"
-      - name: time_name
+      - name: period_raw_name
         description: "時間軸の表示名称"
         tests:
           - accepted_values:

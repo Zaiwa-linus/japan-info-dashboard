@@ -1,11 +1,11 @@
 -- 自然環境 - 土地面積・地積（B11xx, B12xx, B13xx）
--- ユニークキー: area_code, year
+-- ユニークキー: area_code, survey_year
 with source as (
     select
         area_code,
         area_name,
         year_code,
-        year,
+        survey_year,
         indicator_code,
         raw_value
     from {{ ref('stg_natural_environment') }}
@@ -18,7 +18,7 @@ select
     area_code,
     area_name,
     year_code,
-    year,
+    survey_year,
     max(case when indicator_code = 'B1101' then raw_value end) as total_area_excl_northern_ha,
     max(case when indicator_code = 'B1102' then raw_value end) as total_area_incl_northern_ha,
     max(case when indicator_code = 'B1103' then raw_value end) as habitable_area_ha,
@@ -37,4 +37,4 @@ select
     max(case when indicator_code = 'B120107' then raw_value end) as assessed_land_other_m2,
     max(case when indicator_code = 'B1303' then raw_value end) as afforestation_area_ha
 from source
-group by area_code, area_name, year_code, year
+group by area_code, area_name, year_code, survey_year

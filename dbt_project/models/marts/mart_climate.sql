@@ -1,10 +1,10 @@
 -- [責務] 気候指標を都道府県×年×指標の長形式で提供する
--- [ユニークキー] area_code, year, indicator_code
+-- [ユニークキー] area_code, survey_year, indicator_code
 
 select
     area_code,
     area_name,
-    year,
+    survey_year,
     indicator_code,
     case indicator_code
         when 'B4101' then '年平均気温'

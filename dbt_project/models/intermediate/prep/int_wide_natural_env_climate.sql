@@ -1,11 +1,11 @@
 -- 自然環境 - 気象（B41xx）
--- ユニークキー: area_code, year
+-- ユニークキー: area_code, survey_year
 with source as (
     select
         area_code,
         area_name,
         year_code,
-        year,
+        survey_year,
         indicator_code,
         raw_value
     from {{ ref('stg_natural_environment') }}
@@ -16,7 +16,7 @@ select
     area_code,
     area_name,
     year_code,
-    year,
+    survey_year,
     max(case when indicator_code = 'B4101' then raw_value end) as avg_temperature_celsius,
     max(case when indicator_code = 'B4102' then raw_value end) as max_temperature_celsius,
     max(case when indicator_code = 'B4103' then raw_value end) as min_temperature_celsius,
@@ -30,4 +30,4 @@ select
     max(case when indicator_code = 'B4111' then raw_value end) as avg_relative_humidity_pct,
     max(case when indicator_code = 'B4112' then raw_value end) as min_relative_humidity_pct
 from source
-group by area_code, area_name, year_code, year
+group by area_code, area_name, year_code, survey_year

@@ -8,7 +8,7 @@ models:
         description: "都道府県コード"
       - name: area_name
         description: "都道府県名"
-      - name: year
+      - name: survey_year
         description: "調査年（整数）"
       - name: indicator_code
         description: "指標コード（B4101〜B4112）"
