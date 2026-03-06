@@ -64,18 +64,7 @@ where indicator_short_name = '${inputs.selected_item.value}'
 order by area_code
 ```
 
-<AreaMap
-    data={map_data}
-    geoJsonUrl=/japan-info-dashboard/japan_prefectures.geojson
-    geoId=nam_ja
-    areaCol=area_name
-    value=raw_value
-    valueFmt=num0
-    title="{inputs.selected_item.value}（{inputs.selected_year.value}年）"
-    height=500
-    legendType=scalar
-    tooltip={[{id: 'area_name', title: '都道府県'}, {id: 'raw_value', title: '千世帯あたり', fmt: 'num0'}]}
-/>
+<TileMap data={map_data} valueCol="raw_value" fmt="num0" />
 
 ---
 
@@ -101,4 +90,4 @@ order by raw_value desc
 
 ---
 
-<small>データ出典：<a href="https://www.e-stat.go.jp/" target="_blank">e-Stat（政府統計の総合窓口）</a> / 地図データ出典：<a href="https://www.gsi.go.jp/kankyochiri/gm_japan_e.html" target="_blank">地球地図日本</a>（国土地理院）</small>
+<small>データ出典：<a href="https://www.e-stat.go.jp/" target="_blank">e-Stat（政府統計の総合窓口）</a></small>

@@ -62,18 +62,7 @@ where store_type_name = '${inputs.selected_store.value}'
 order by area_code
 ```
 
-<AreaMap
-    data={map_data}
-    geoJsonUrl=/japan-info-dashboard/japan_prefectures.geojson
-    geoId=nam_ja
-    areaCol=area_name
-    value=sales_amount
-    valueFmt=num0
-    title="{inputs.selected_store.value} 販売額（{inputs.selected_month.label}）"
-    height=500
-    legendType=scalar
-    tooltip={[{id: 'area_name', title: '都道府県'}, {id: 'sales_amount', title: '販売額（百万円）', fmt: 'num0'}]}
-/>
+<TileMap data={map_data} valueCol="sales_amount" fmt="num0" />
 
 ---
 
@@ -163,4 +152,4 @@ order by total_sales desc
 
 ---
 
-<small>データ出典：<a href="https://www.e-stat.go.jp/" target="_blank">e-Stat（政府統計の総合窓口）</a> 商業動態統計調査 / 地図データ出典：<a href="https://www.gsi.go.jp/kankyochiri/gm_japan_e.html" target="_blank">地球地図日本</a>（国土地理院）</small>
+<small>データ出典：<a href="https://www.e-stat.go.jp/" target="_blank">e-Stat（政府統計の総合窓口）</a> 商業動態統計調査</small>

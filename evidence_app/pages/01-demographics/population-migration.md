@@ -41,18 +41,7 @@ order by raw_value desc
 
 ## 転入者数マップ
 
-<AreaMap
-    data={total_migration}
-    geoJsonUrl=/japan-info-dashboard/japan_prefectures.geojson
-    geoId=nam_ja
-    areaCol=current_address_name
-    value=total_migrants
-    valueFmt=num0
-    title="都道府県別 転入者数（2024年）"
-    height=500
-    legendType=scalar
-    tooltip={[{id: 'current_address_name', title: '都道府県'}, {id: 'total_migrants', title: '転入者数', fmt: 'num0'}]}
-/>
+<TileMap data={total_migration} areaCodeCol="current_address_code" areaNameCol="current_address_name" valueCol="total_migrants" fmt="num0" />
 
 ---
 
@@ -80,18 +69,7 @@ order by raw_value desc
     yFmt=num0
 />
 
-<AreaMap
-    data={foreign_migration}
-    geoJsonUrl=/japan-info-dashboard/japan_prefectures.geojson
-    geoId=nam_ja
-    areaCol=current_address_name
-    value=foreign_migrants
-    valueFmt=num0
-    title="都道府県別 外国人転入者数（2024年）"
-    height=500
-    legendType=scalar
-    tooltip={[{id: 'current_address_name', title: '都道府県'}, {id: 'foreign_migrants', title: '外国人転入者数', fmt: 'num0'}]}
-/>
+<TileMap data={foreign_migration} areaCodeCol="current_address_code" areaNameCol="current_address_name" valueCol="foreign_migrants" fmt="num0" />
 
 ---
 

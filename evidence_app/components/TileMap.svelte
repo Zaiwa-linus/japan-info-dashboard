@@ -15,6 +15,15 @@
     /** @type {string} fmt - 数値フォーマット: 'num0' (整数) or 'num1' (小数1桁)。デフォルト 'num1' */
     export let fmt = 'num1';
 
+    /** @type {string} areaCodeCol - area_code カラム名 */
+    export let areaCodeCol = 'area_code';
+
+    /** @type {string} areaNameCol - area_name カラム名 */
+    export let areaNameCol = 'area_name';
+
+    /** @type {string} valueCol - value カラム名 */
+    export let valueCol = 'value';
+
     // グリッド配置定義 (area_code → [row, col])
     const POSITIONS = {
         '01000': [1, 12],
@@ -47,10 +56,10 @@
     }
 
     // area_code をキーにしたデータマップを構築
-    $: dataMap = new Map(data.map(d => [d.area_code, d]));
+    $: dataMap = new Map(data.map(d => [d[areaCodeCol], d]));
 
     // min/max を計算してヒートマップ比率を求める
-    $: values = data.filter(d => d.value != null).map(d => Number(d.value));
+    $: values = data.filter(d => d[valueCol] != null).map(d => Number(d[valueCol]));
     $: minVal = values.length > 0 ? Math.min(...values) : 0;
     $: maxVal = values.length > 0 ? Math.max(...values) : 0;
     $: range = maxVal - minVal;
@@ -73,10 +82,10 @@
             code,
             row,
             col,
-            name: d ? shortName(d.area_name) : code,
-            fullName: d?.area_name ?? '',
-            value: d?.value ?? null,
-            isSelected: d?.area_name === selected,
+            name: d ? shortName(d[areaNameCol]) : code,
+            fullName: d?.[areaNameCol] ?? '',
+            value: d?.[valueCol] ?? null,
+            isSelected: d?.[areaNameCol] === selected,
         };
     });
 </script>

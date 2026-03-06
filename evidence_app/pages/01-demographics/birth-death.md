@@ -77,18 +77,7 @@ order by natural_change desc
 
 ## 自然増減マップ
 
-<AreaMap
-    data={natural_change_ranking}
-    geoJsonUrl=/japan-info-dashboard/japan_prefectures.geojson
-    geoId=nam_ja
-    areaCol=area_name
-    value=natural_change
-    valueFmt=num0
-    title="都道府県別 自然増減（出生 - 死亡）"
-    height=500
-    legendType=scalar
-    tooltip={[{id: 'area_name', title: '都道府県'}, {id: 'birth_count', title: '出生児数', fmt: 'num0'}, {id: 'death_count', title: '死亡者数', fmt: 'num0'}, {id: 'natural_change', title: '自然増減', fmt: 'num0'}]}
-/>
+<TileMap data={natural_change_ranking} valueCol="natural_change" fmt="num0" />
 
 ---
 

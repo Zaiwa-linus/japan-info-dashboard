@@ -40,18 +40,7 @@ order by total_population desc
 
 ### 都道府県別 総人口マップ
 
-<AreaMap
-    data={population_total}
-    geoJsonUrl=/japan-info-dashboard/japan_prefectures.geojson
-    geoId=nam_ja
-    areaCol=area_name
-    value=total_population
-    valueFmt=num0
-    title="都道府県別 総人口"
-    height=500
-    legendType=scalar
-    tooltip={[{id: 'area_name', title: '都道府県'}, {id: 'total_population', title: '人口', fmt: 'num0'}]}
-/>
+<TileMap data={population_total} valueCol="total_population" fmt="num0" />
 
 ### 人口データテーブル
 
@@ -82,18 +71,7 @@ order by change desc
 
 ## 前年比較（2023年 → 2024年）
 
-<AreaMap
-    data={yoy_comparison}
-    geoJsonUrl=/japan-info-dashboard/japan_prefectures.geojson
-    geoId=nam_ja
-    areaCol=area_name
-    value=change
-    valueFmt=num0
-    title="都道府県別 人口増減（2023→2024）"
-    height=500
-    legendType=scalar
-    tooltip={[{id: 'area_name', title: '都道府県'}, {id: 'change', title: '増減数', fmt: 'num0'}, {id: 'change_pct', title: '増減率(%)', fmt: 'num2'}]}
-/>
+<TileMap data={yoy_comparison} valueCol="change" fmt="num0" />
 
 <DataTable data={yoy_comparison} rows=all search=true>
     <Column id=area_name title="都道府県" />
@@ -108,4 +86,3 @@ order by change desc
 ---
 
 <small>データ出典：<a href="https://www.e-stat.go.jp/" target="_blank">e-Stat（政府統計の総合窓口）</a> 人口推計（総務省）</small>
-<small>地図データ出典：<a href="https://www.gsi.go.jp/kankyochiri/gm_japan_e.html" target="_blank">地球地図日本</a>（国土地理院）</small>
