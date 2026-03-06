@@ -61,11 +61,14 @@ staging 層のすべての列名は、以下のサフィックスまたは許可
 | `_month` | 月（1〜12） | `survey_month` |
 | `_year` | 年（西暦） | `survey_year` |
 | `_fyear` | 年度（4月始まり） | `fiscal_fyear` |
+| `_period_raw_code` | 未整理の時間軸コード（年度/年/月が混在する生データ） | `survey_period_raw_code` |
+| `_period_raw_name` | 未整理の時間軸名称（年度/年/月が混在する生データ） | `survey_period_raw_name` |
 
 **例外は一切なし。** すべての列名が上記サフィックスのいずれかで終わること。
 
 - `unit` → `unit_name` にリネームする
 - 汎用的な数値列は `raw_value`（整理前）や `{指標}_value` にリネームする
+- 時間軸データが年度・年・月など複数の粒度が混在している場合は `_period_raw_code` / `_period_raw_name` を使用し、intermediate 層で適切な `_year` / `_fyear` / `_month` / `year_month` に変換する
 
 #### バリデーションの実行（必須）
 

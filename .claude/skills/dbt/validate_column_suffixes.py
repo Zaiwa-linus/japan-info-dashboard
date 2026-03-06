@@ -4,7 +4,7 @@ dbt staging モデルの列名サフィックスバリデーション
 staging SQL ファイルの SELECT 句内の列エイリアスが、
 許可されたサフィックスのいずれかで終わっているかをチェックする。
 
-許可サフィックス: _code, _value, _name, _day, _month, _year, _fyear
+許可サフィックス: _code, _value, _name, _day, _month, _year, _fyear, _period_raw_code, _period_raw_name
 例外: unit, value（サフィックスなしで許可）
 
 Usage:
@@ -17,7 +17,7 @@ import glob
 import re
 import sys
 
-ALLOWED_SUFFIXES = ("_code", "_value", "_name", "_day", "_month", "_year", "_fyear")
+ALLOWED_SUFFIXES = ("_period_raw_code", "_period_raw_name", "_code", "_value", "_name", "_day", "_month", "_year", "_fyear")
 ALLOWED_EXACT: set[str] = set()
 
 # SQL の型名（cast(... as TYPE) で使われるもの）
