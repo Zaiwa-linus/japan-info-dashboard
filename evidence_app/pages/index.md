@@ -3,22 +3,6 @@ title: 日本の統計ダッシュボード
 ---
 
 <style>
-    .card-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 1rem;
-        margin: 1.5rem 0;
-    }
-    .card {
-        background: transparent;
-        border: 1px solid #cbd5e1;
-        border-radius: 12px;
-        padding: 1.25rem 1.5rem;
-        transition: border-color 0.2s;
-    }
-    .card:hover {
-        border-color: #3b82f6;
-    }
     .nav-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -52,7 +36,7 @@ title: 日本の統計ダッシュボード
 
 都道府県別の統計データを可視化しています。データは e-Stat（政府統計の総合窓口）から取得しています。
 
-## 主要指標
+## 主要指標（2024年）
 
 ```sql total_pop
 select
@@ -81,57 +65,13 @@ where nationality_code = '60000'
     and previous_address_code = '00005'
 ```
 
-<div class="card-grid">
-    <div class="card">
-        <BigValue
-            data={total_pop}
-            value=pop_2024
-            title="総人口（2024年）"
-            fmt=num0
-            comparison=pop_change
-            comparisonTitle="前年比"
-            comparisonFmt=num0
-            downIsGood=false
-            link=/japan-info-dashboard/01-demographics/population
-        />
-    </div>
-    <div class="card">
-        <BigValue
-            data={birth_death_national}
-            value=total_births
-            title="出生数"
-            fmt=num0
-            link=/japan-info-dashboard/01-demographics/birth-death
-        />
-    </div>
-    <div class="card">
-        <BigValue
-            data={birth_death_national}
-            value=total_deaths
-            title="死亡数"
-            fmt=num0
-            link=/japan-info-dashboard/01-demographics/birth-death
-        />
-    </div>
-    <div class="card">
-        <BigValue
-            data={birth_death_national}
-            value=natural_change
-            title="自然増減"
-            fmt=num0
-            link=/japan-info-dashboard/01-demographics/birth-death
-        />
-    </div>
-    <div class="card">
-        <BigValue
-            data={migration_national}
-            value=total_migrants
-            title="転入者数（2024年）"
-            fmt=num0
-            link=/japan-info-dashboard/01-demographics/population-migration
-        />
-    </div>
-</div>
+<CardGrid>
+    <StatCard emoji="👥" title="総人口" value={total_pop[0].pop_2024} comparison={total_pop[0].pop_change} comparisonTitle="前年比" link="/japan-info-dashboard/01-demographics/population" />
+    <StatCard emoji="👶" title="出生数" value={birth_death_national[0].total_births} link="/japan-info-dashboard/01-demographics/birth-death" />
+    <StatCard emoji="⚰️" title="死亡数" value={birth_death_national[0].total_deaths} link="/japan-info-dashboard/01-demographics/birth-death" />
+    <StatCard emoji="📊" title="自然増減" value={birth_death_national[0].natural_change} link="/japan-info-dashboard/01-demographics/birth-death" />
+    <StatCard emoji="🚚" title="転入者数" value={migration_national[0].total_migrants} link="/japan-info-dashboard/01-demographics/population-migration" />
+</CardGrid>
 
 ---
 
