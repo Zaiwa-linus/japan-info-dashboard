@@ -18,3 +18,5 @@ models:
         description: "値の単位（台、セット、畳）"
       - name: raw_value
         description: "所有数量（千世帯あたり）"
+        tests:
+          - not_null

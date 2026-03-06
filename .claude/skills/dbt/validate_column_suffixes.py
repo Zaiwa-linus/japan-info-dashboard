@@ -4,7 +4,7 @@ dbt staging モデルの列名サフィックスバリデーション
 staging SQL ファイルの SELECT 句内の列エイリアスが、
 許可されたサフィックスのいずれかで終わっているかをチェックする。
 
-許可サフィックス: _code, _value, _name, _day, _month, _year, _fyear
+許可サフィックス: _code, _value, _name, _day, _month, _year, _fyear, _period_raw_code, _period_raw_name
 例外: unit, value（サフィックスなしで許可）
 
 Usage:
@@ -17,7 +17,7 @@ import glob
 import re
 import sys
 
-ALLOWED_SUFFIXES = ("_code", "_value", "_name", "_day", "_month", "_year", "_fyear")
+ALLOWED_SUFFIXES = ("_period_raw_code", "_period_raw_name", "_code", "_value", "_name", "_day", "_month", "_year", "_fyear")
 ALLOWED_EXACT: set[str] = set()
 
 # SQL の型名（cast(... as TYPE) で使われるもの）
@@ -28,6 +28,40 @@ SQL_TYPES = {
     "boolean", "bool",
     "date", "timestamp", "datetime", "time",
 }
+
+
+def _remove_cast_expressions(line: str) -> str:
+    """cast/try_cast 式をネストも含めて除去する。
+
+    括弧の深さを追跡し、cast(...) 全体を CAST_REMOVED に置換する。
+    """
+    result = []
+    i = 0
+    upper = line.upper()
+    while i < len(line):
+        # cast or try_cast の開始を検出
+        match = re.match(r"(try_)?cast\s*\(", upper[i:], re.IGNORECASE)
+        if match:
+            # 括弧の対応を追跡
+            depth = 0
+            j = i + match.start()
+            # '(' の位置まで進む
+            paren_start = upper.index("(", i + match.start())
+            j = paren_start
+            depth = 1
+            j += 1
+            while j < len(line) and depth > 0:
+                if line[j] == "(":
+                    depth += 1
+                elif line[j] == ")":
+                    depth -= 1
+                j += 1
+            result.append("CAST_REMOVED")
+            i = j
+        else:
+            result.append(line[i])
+            i += 1
+    return "".join(result)
 
 
 def extract_column_aliases(sql_text: str) -> list[tuple[int, str]]:
@@ -64,12 +98,7 @@ def extract_column_aliases(sql_text: str) -> list[tuple[int, str]]:
 
         # cast(... as TYPE) / try_cast(... as TYPE) 内の TYPE を除外するため、
         # まず cast 式を除去したテキストで alias を検出する
-        cleaned = re.sub(
-            r"(try_)?cast\s*\([^)]*\bas\s+\w+\)",
-            "CAST_REMOVED",
-            line,
-            flags=re.IGNORECASE,
-        )
+        cleaned = _remove_cast_expressions(line)
 
         # "as alias_name" パターンを検出
         for match in re.finditer(r"\bas\s+(\w+)", cleaned, re.IGNORECASE):

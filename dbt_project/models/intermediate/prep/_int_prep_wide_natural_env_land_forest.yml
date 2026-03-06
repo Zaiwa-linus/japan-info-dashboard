@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: int_prep_wide_natural_env_land_forest
+    description: "自然環境 - 林野面積の横持ちモデル。林野面積、森林面積、草生地面積を地域×年で横持ちにしたもの。"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - area_code
+            - survey_year
+    columns:
+      - name: area_code
+        description: "都道府県コード"
+        tests:
+          - not_null
+      - name: area_name
+        description: "都道府県名"
+        tests:
+          - not_null
+      - name: survey_year
+        description: "調査年（整数）"
+        tests:
+          - not_null
+      - name: forest_and_field_area_ha
+        description: "B1105 林野面積（ha）"
+        tests:
+          - not_null
+      - name: forest_area_ha
+        description: "B1106 森林面積（ha）"
+        tests:
+          - not_null
+      - name: grassland_area_ha
+        description: "B1107 森林以外の草生地面積（ha）"
+        tests:
+          - not_null

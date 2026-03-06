@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: mart_climate
+    description: "気候指標を都道府県×年×指標の長形式で提供するマート。12種の気候指標（気温・日数・降水量・湿度等）を含む。"
+    columns:
+      - name: area_code
+        description: "都道府県コード"
+      - name: area_name
+        description: "都道府県名"
+      - name: survey_year
+        description: "調査年（整数）"
+      - name: indicator_code
+        description: "指標コード（B4101〜B4112）"
+      - name: indicator_label
+        description: "指標の日本語ラベル"
+      - name: unit
+        description: "単位（℃, 日, 時間, mm, cm, %）"
+      - name: value
+        description: "指標値"

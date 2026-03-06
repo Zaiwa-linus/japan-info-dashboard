@@ -17,6 +17,42 @@ select distinct gender_name from japan_stats.mart_population order by gender_nam
 
 <Dropdown data={years} name=selected_year value=year_name />
 
+```sql pop_top3
+select area_name, sum(raw_value) as total_population
+from japan_stats.mart_population
+where year_name = '${inputs.selected_year.value}'
+group by area_name
+order by total_population desc
+limit 3
+```
+
+```sql pop_bottom3
+select area_name, sum(raw_value) as total_population
+from japan_stats.mart_population
+where year_name = '${inputs.selected_year.value}'
+group by area_name
+order by total_population asc
+limit 3
+```
+
+#### 🏆 人口 Top 3
+
+<CardGrid>
+    {#each pop_top3 as row, i}
+    <StatCard emoji={["🥇", "🥈", "🥉"][i]} title="{row.area_name}" value={row.total_population} />
+    {/each}
+</CardGrid>
+
+#### 📉 人口 Bottom 3
+
+<CardGrid>
+    {#each pop_bottom3 as row, i}
+    <StatCard emoji={["1️⃣", "2️⃣", "3️⃣"][i]} title="{row.area_name}" value={row.total_population} />
+    {/each}
+</CardGrid>
+
+---
+
 ```sql population_by_area
 select
     area_name,
@@ -40,25 +76,17 @@ order by total_population desc
 
 ### 都道府県別 総人口マップ
 
-<AreaMap
-    data={population_total}
-    geoJsonUrl=/japan-info-dashboard/japan_prefectures.geojson
-    geoId=nam_ja
-    areaCol=area_name
-    value=total_population
-    valueFmt=num0
-    title="都道府県別 総人口"
-    height=500
-    legendType=scalar
-    tooltip={[{id: 'area_name', title: '都道府県'}, {id: 'total_population', title: '人口', fmt: 'num0'}]}
-/>
+<TileMap data={population_total} valueCol="total_population" fmt="num0" />
 
-### 人口データテーブル
+<details>
+<summary>人口データテーブルを表示</summary>
 
 <DataTable data={population_total} rows=all search=true>
     <Column id=area_name title="都道府県" />
     <Column id=total_population title="総人口" fmt=num0 />
 </DataTable>
+
+</details>
 
 ---
 
@@ -82,18 +110,10 @@ order by change desc
 
 ## 前年比較（2023年 → 2024年）
 
-<AreaMap
-    data={yoy_comparison}
-    geoJsonUrl=/japan-info-dashboard/japan_prefectures.geojson
-    geoId=nam_ja
-    areaCol=area_name
-    value=change
-    valueFmt=num0
-    title="都道府県別 人口増減（2023→2024）"
-    height=500
-    legendType=scalar
-    tooltip={[{id: 'area_name', title: '都道府県'}, {id: 'change', title: '増減数', fmt: 'num0'}, {id: 'change_pct', title: '増減率(%)', fmt: 'num2'}]}
-/>
+<TileMap data={yoy_comparison} valueCol="change" fmt="num0" />
+
+<details>
+<summary>前年比較テーブルを表示</summary>
 
 <DataTable data={yoy_comparison} rows=all search=true>
     <Column id=area_name title="都道府県" />
@@ -103,9 +123,10 @@ order by change desc
     <Column id=change_pct title="増減率(%)" fmt=num2 />
 </DataTable>
 
+</details>
+
 <LastRefreshed />
 
 ---
 
 <small>データ出典：<a href="https://www.e-stat.go.jp/" target="_blank">e-Stat（政府統計の総合窓口）</a> 人口推計（総務省）</small>
-<small>地図データ出典：<a href="https://www.gsi.go.jp/kankyochiri/gm_japan_e.html" target="_blank">地球地図日本</a>（国土地理院）</small>

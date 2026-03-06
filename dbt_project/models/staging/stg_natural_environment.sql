@@ -1,6 +1,9 @@
 -- 社会・人口統計体系 - Ｂ 自然環境（都道府県別）
+-- 統計表ID: 0000010102
+-- description: data/0000010102/description.md
+
 with source as (
-    select * from read_csv('../data/0000010102/0000010102.csv', nullstr = '-', auto_detect = true)
+    select * from {{ source('estat', '0000010102') }}
 )
 
 select
@@ -12,7 +15,7 @@ select
     "地域" as area_name,
     "調査年_code" as year_code,
     "調査年" as year_name,
-    cast(left(cast("調査年_code" as varchar), 4) as integer) as year,
+    cast(left(cast("調査年_code" as varchar), 4) as integer) as survey_year,
     unit as unit_name,
     try_cast(value as double) as raw_value
 from source

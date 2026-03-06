@@ -8,6 +8,8 @@ description: dbt モデルの作成・管理ルール。staging / intermediate /
 本プロジェクトの dbt モデルは **Staging → Intermediate → Marts** の3層アーキテクチャで管理する。
 各層のルールに従ってモデルを作成・修正すること。
 
+> サンプルコードは `.claude/skills/dbt/examples/` を参照。
+
 ---
 
 ## 1. Staging 層 (`dbt_project/models/staging/`)
@@ -22,79 +24,40 @@ description: dbt モデルの作成・管理ルール。staging / intermediate /
 | モデル YAML | `_stg_{データ名}.yml` | 各モデルごとに1ファイル作成（列定義・テスト） |
 | ソース定義 | `sources.yml` | 全ソースの CSV パス定義（共通1ファイル） |
 
-### 1.2 SQL の書き方
+### 1.2 SQL の必須ルール
 
-```sql
--- {統計名} - {テーブル説明}
--- 統計表ID: {ID}
--- description: data/{統計表ID}/description.md
-
-with source as (
-    select * from {{ source('estat', '{統計表ID}') }}
-)
-
-select
-    "{元カラム名}_code" as {意味}_code,
-    "{元カラム名}" as {意味}_name,
-    ...
-    "{元カラム:単位}" as unit_name,
-    try_cast(value as double) as raw_value
-from source
-```
-
-**必須ルール:**
 - **冒頭コメントに `description: data/{統計表ID}/description.md` のパスを記載する**
 - ソース内容をそのまま SELECT する（フィルタ・結合・集計はしない）
 - `with source as (select * from ...)` パターンを使用する
 - `try_cast` で安全に型変換する
 
+> SQL / YAML テンプレート → `examples/staging.md`
+
 ### 1.3 列名サフィックスルール（必須）
 
-staging 層のすべての列名は、以下のサフィックスまたは許可名のいずれかでなければならない。
+staging 層のすべての列名は、以下のサフィックスのいずれかで終わること。**例外は一切なし。**
 
 | サフィックス | 用途 | 例 |
 |-------------|------|-----|
-| `_code` | 分類コード | `area_code`, `item_code`, `purpose_code` |
-| `_name` | 分類名称 | `area_name`, `item_name`, `purpose_name` |
-| `_value` | 数値（集計値以外） | `indicator_value` |
+| `_code` | 分類コード | `area_code`, `item_code` |
+| `_name` | 分類名称 | `area_name`, `item_name` |
+| `_value` | 数値（集計値以外） | `indicator_value`, `raw_value` |
 | `_day` | 日（1〜31） | `survey_day` |
 | `_month` | 月（1〜12） | `survey_month` |
 | `_year` | 年（西暦） | `survey_year` |
 | `_fyear` | 年度（4月始まり） | `fiscal_fyear` |
+| `_period_raw_code` | 未整理の時間軸コード | `survey_period_raw_code` |
+| `_period_raw_name` | 未整理の時間軸名称 | `survey_period_raw_name` |
 
-**例外は一切なし。** すべての列名が上記サフィックスのいずれかで終わること。
-
-- `unit` → `unit_name` にリネームする
-- 汎用的な数値列は `raw_value`（整理前）や `{指標}_value` にリネームする
+- `unit` → `unit_name` にリネーム
+- 時間軸が年度・年・月など混在する場合は `_period_raw_code` / `_period_raw_name` を使い、intermediate 層で変換する
 
 #### バリデーションの実行（必須）
 
-staging モデルを作成・修正したら、**必ず** Python バリデーションスクリプトを実行すること。
+staging モデルを作成・修正したら、**必ず**バリデーションスクリプトを実行すること。通らない場合は修正してから次の工程に進む。
 
 ```bash
-# 全 staging モデルをチェック
 uv run python .claude/skills/dbt/validate_column_suffixes.py
-
-# 特定ファイルのみチェック
-uv run python .claude/skills/dbt/validate_column_suffixes.py dbt_project/models/staging/stg_xxx.sql
-```
-
-**バリデーションが通らない場合、列名を修正してから次の工程に進むこと。**
-
-### 1.4 モデル YAML の書き方
-
-```yaml
-version: 2
-
-models:
-  - name: stg_{データ名}
-    description: "{統計名} - {説明}"
-    columns:
-      - name: {列名}
-        description: "{列の説明}"
-        tests:
-          - accepted_values:
-              values: [...]  # コード列・カテゴリ列には必ず設定
 ```
 
 ---
@@ -116,15 +79,55 @@ intermediate/
     └── _int_{名前}.yml
 ```
 
-### 2.2 SQL 冒頭コメント（必須）
+### 2.2 ITM 設計ルール（必須）
+
+Intermediate 層のモデルは **他のモデルやダッシュボードから流用される前提** で設計する。以下のルールを厳守すること。
+
+> 各ルールの OK/NG コード例 → `examples/intermediate.md`
+
+#### ルール1: NULL 値の完全排除
+
+ITM の出力に **NULL 値は一切許容しない**。`WHERE ... IS NOT NULL` で除外するか `COALESCE` で埋めること。横持ち変換時の NULL も禁止（ルール3参照）。
+
+#### ルール2: 指標区分をユニークキーに含めない
+
+ユニークキーに **指標の種類（売上・利益・損失 等）を区分として持つことを禁止** する。指標が複数ある場合は **横持ち（ピボット）** にすること。
+
+#### ルール3: 横持ち時のデータ期間不一致はモデルを分離する
+
+横持ちにした結果、指標間でデータの存在期間が異なり NULL が発生する場合は、**モデル自体を分けること**。期間が揃う指標同士だけを1つの横持ちモデルにまとめる。
+
+#### ルール4: P-key の値は MECE であること
+
+ITM のユニークキー（P-key）に使う分類列は、**取り得る値が MECE（漏れなくダブりなく）** でなければならない。
+
+- 分類の各値が **相互に排他的** で、かつ **全体を網羅** していること
+- **NG**: 「男」「女」「男女」のように、集約値と内訳値が混在 → MECE でない
+- **NG**: 「全国」「東京都」「大阪府」…のように、合計行と個別行が混在 → 同上
+
+集約行（合計・小計）が含まれる場合は、`WHERE` で除外するか、別のモデルに分離すること。
+
+#### ルール5: value 列は合計が意味をなすこと
+
+ITM の `value` 列（数値列）は、**同一列内の値を合計したときに意味のある数値** でなければならない。
+
+- 1つの value 列には **同じ単位・同じ意味の数値** のみを格納すること
+- **NG**: 「発注数」と「売上高」を同じ `value` 列に縦持ち → 合計しても意味不明
+- **NG**: 「人口」と「人口密度」を同じ列に持つ → 単位が異なり合計不可
+
+異なる指標は **別の列に横持ち** するか、**別のモデルに分離** すること（ルール2・3も参照）。
+
+#### ルール6: 月次データの日付型
+
+月次データは **`DATE` 型（月初日固定）** で保持する。列名は `year_month` とする。
+
+- `DATE` 型にすることでソート・フィルタ・日付関数・Evidence チャート軸すべてに対応できる
+- 年のみのデータは `INTEGER` 型の `year` 列を使用する
+- `year_month` は列名サフィックスルールの例外として許容する
+
+### 2.3 SQL 冒頭コメント（必須）
 
 intermediate / marts の SQL ファイルは、冒頭5行以内に**モデルの責務**と**ユニークキー**を明示すること。
-
-```sql
--- [責務] 4業態の月次販売データを統合し、月次データのみに絞り込む
--- [ユニークキー] area_code, store_type_name, time_code
--- [入力] stg_convenience_store_sales, stg_electronics_store_sales, ...
-```
 
 | 項目 | 説明 |
 |------|------|
@@ -132,62 +135,17 @@ intermediate / marts の SQL ファイルは、冒頭5行以内に**モデルの
 | `[ユニークキー]` | 出力テーブルの1行を一意に特定する列の組み合わせ |
 | `[入力]` | ref で参照する上流モデル名（任意だが推奨） |
 
-### 2.3 prep（前処理）
+### 2.4 prep（前処理）
 
 **ビジネスロジックを含まない**、データの構造的な変換に使用する。
 
-用途:
-- **指標の分解**: ソースに複数指標が結合されている場合に、特定の指標だけを抽出する
-- **年度の結合**: 帳票が年度別に分かれている場合に UNION ALL で統合する
-- **不要な集計行の除外**: 合計行・小計行など、分析に不要な行を除外する
-- **型変換・コード抽出**: 年コードから年を抽出する等の機械的な変換
+用途: 指標の分解 / 年度の結合（UNION ALL）/ 不要な集計行の除外 / 型変換・コード抽出
 
-```sql
--- [責務] 2022年度と2023年度の調査データを統合する
--- [ユニークキー] area_code, survey_year
--- [入力] stg_survey_2022, stg_survey_2023
-
-with fy2022 as (
-    select * from {{ ref('stg_survey_2022') }}
-),
-fy2023 as (
-    select * from {{ ref('stg_survey_2023') }}
-)
-select * from fy2022
-union all
-select * from fy2023
-```
-
-### 2.4 logic（ビジネスロジック）
+### 2.5 logic（ビジネスロジック）
 
 ビジネス上の判断や分類を伴う変換に使用する。
 
-用途:
-- **カテゴリ分類**: CASE 文による目的別分類・地域分類の付与
-- **フラグ付与**: 小計行かどうか、特定条件に該当するかのフラグ追加
-- **複数ソースの結合**: 異なるステージングモデルの JOIN / UNION
-- **マスタテーブルの作成**: コード→表示名のルックアップテーブル
-
-```sql
--- [責務] 入国目的コードに目的カテゴリ・地域分類を付与し、集約行を除外する
--- [ユニークキー] purpose_code, nationality_code, year_code
--- [入力] int_prep_immigration
-
-select
-    *,
-    case
-        when purpose_code in ('100', '110') then '短期滞在'
-        when purpose_code >= '160' then '特定活動'
-    end as purpose_category_name
-from {{ ref('int_prep_immigration') }}
-```
-
-### 2.4 命名規則
-
-| ディレクトリ | SQL ファイル | YAML ファイル |
-|-------------|-------------|--------------|
-| `prep/` | `int_prep_{名前}.sql` | `_int_prep_{名前}.yml` |
-| `logic/` | `int_{名前}.sql` | `_int_{名前}.yml` |
+用途: カテゴリ分類（CASE文）/ フラグ付与 / 複数ソースの結合 / マスタテーブルの作成
 
 ---
 
@@ -195,39 +153,12 @@ from {{ ref('int_prep_immigration') }}
 
 Evidence から直接参照される最終出力。**ワイドテーブル（横持ち）** を採用する。
 
-### 3.1 ワイドテーブルの設計方針
-
 - **行**: 都道府県 × 年月（または年）などのグレイン（粒度）
 - **列**: 各指標を個別の列として展開
+- ファイル命名: `mart_{テーマ名}.sql` / `_mart_{テーマ名}.yml`
+- マテリアライゼーション: `dbt_project.yml` で `+materialized: table` 設定済み（個別指定不要）
 
-```sql
--- [責務] 4業態の月次販売データを都道府県×年月×業態のワイドテーブルに変換する
--- [ユニークキー] area_code, store_type_name, year_month
--- [入力] int_retail_sales
-
-select
-    area_code,
-    area_name,
-    year,
-    month,
-    year_month,
-    max(case when indicator_name = '販売額' then value end) as sales_value,
-    max(case when indicator_name = '店舗数' then value end) as store_count_value
-from {{ ref('int_retail_sales') }}
-group by area_code, area_name, year, month, year_month
-```
-
-### 3.2 ファイル構成
-
-| ファイル | 命名規則 |
-|---------|---------|
-| SQL モデル | `mart_{テーマ名}.sql` |
-| モデル YAML | `_mart_{テーマ名}.yml` |
-
-### 3.3 マテリアライゼーション
-
-marts 層は `dbt_project.yml` で `+materialized: table` に設定済み。
-個別指定は不要。
+> ワイドテーブルの SQL 例 → `examples/marts.md`
 
 ---
 
@@ -237,9 +168,6 @@ marts 層は `dbt_project.yml` で `+materialized: table` に設定済み。
 2. **sources.yml にソースを追加**
 3. **staging モデルを作成**（SQL + YAML）
 4. **サフィックスバリデーションを実行**
-   ```bash
-   uv run python .claude/skills/dbt/validate_column_suffixes.py
-   ```
 5. **intermediate モデルを作成**（prep → logic の順）
 6. **mart モデルを作成**（ワイドテーブル形式）
 7. **dbt run & test で動作確認**

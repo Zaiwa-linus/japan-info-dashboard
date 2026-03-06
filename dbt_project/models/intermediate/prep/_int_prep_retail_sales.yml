@@ -20,11 +20,13 @@ models:
         description: "都道府県コード"
       - name: area_name
         description: "都道府県名"
-      - name: time_code
+      - name: period_raw_code
         description: "時間軸コード（月次のみ）"
-      - name: time_name
+      - name: period_raw_name
         description: "時間軸の表示名称（例: 2024年1月）"
       - name: store_type_name
         description: "業態名（コンビニ、家電量販店、ドラッグストア、ホームセンター）"
       - name: raw_value
         description: "値（double型）"
+        tests:
+          - not_null

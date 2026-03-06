@@ -1,0 +1,39 @@
+version: 2
+
+models:
+  - name: int_prep_wide_natural_env_land_assessed_detail
+    description: "自然環境 - 評価総地積（詳細分類）の横持ちモデル。山林、牧場、原野、その他を地域×年で横持ちにしたもの。"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - area_code
+            - survey_year
+    columns:
+      - name: area_code
+        description: "都道府県コード"
+        tests:
+          - not_null
+      - name: area_name
+        description: "都道府県名"
+        tests:
+          - not_null
+      - name: survey_year
+        description: "調査年（整数）"
+        tests:
+          - not_null
+      - name: assessed_land_mountain_m2
+        description: "B120104 評価総地積（山林）（m2）"
+        tests:
+          - not_null
+      - name: assessed_land_pasture_m2
+        description: "B120105 評価総地積（牧場）（m2）"
+        tests:
+          - not_null
+      - name: assessed_land_wasteland_m2
+        description: "B120106 評価総地積（原野）（m2）"
+        tests:
+          - not_null
+      - name: assessed_land_other_m2
+        description: "B120107 評価総地積（その他）（m2）"
+        tests:
+          - not_null

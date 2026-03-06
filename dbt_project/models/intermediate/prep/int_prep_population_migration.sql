@@ -14,4 +14,5 @@ select
 from {{ ref('stg_population_migration') }}
 where right(current_address_code, 3) = '000'
     and (previous_address_code = '00005' or right(previous_address_code, 3) = '000')
+    and (previous_address_code = '00005' or current_address_code != previous_address_code)
     and raw_value is not null

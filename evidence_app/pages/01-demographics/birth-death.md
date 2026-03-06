@@ -3,158 +3,115 @@ title: 都道府県別 出生・死亡者数
 sidebar_position: 3
 ---
 
-人口推計（総務省）のデータを基に、都道府県別の出生児数・死亡者数を可視化しています。2023年10月〜2024年9月の年間データを収録しています。
+人口推計（総務省）のデータを基に、都道府県別の出生児数・自然増減を可視化しています。2023年10月〜2024年9月の年間データを収録しています。
 
 ---
 
-## 都道府県別 出生数・死亡数（対比）
+## 出生児数
 
-```sql birth_death_total
+```sql birth_ranking
 select
     area_name,
     area_code,
-    sum(case when birth_death_name = '出生児数' then raw_value else 0 end) as birth_count,
-    sum(case when birth_death_name = '死亡者数' then raw_value else 0 end) as death_count,
-    sum(case when birth_death_name = '出生児数' then raw_value else 0 end)
-    - sum(case when birth_death_name = '死亡者数' then raw_value else 0 end) as natural_change
+    sum(raw_value) as birth_count
 from japan_stats.mart_birth_death
-where gender_name = '男女計'
-    and nationality_name = '日本人'
+where nationality_name = '日本人'
+    and birth_death_name = '出生児数'
 group by area_name, area_code
-order by area_code
+order by birth_count desc
 ```
 
-<BarChart
-    data={birth_death_total}
-    x=area_name
-    y={["birth_count", "death_count"]}
-    seriesNames={["出生児数", "死亡者数"]}
-    title="都道府県別 出生児数・死亡者数（日本人・男女計）"
-    yAxisTitle="人数（人）"
-    type=grouped
-    yFmt=num0
-/>
+```sql birth_top3
+select * from ${birth_ranking} limit 3
+```
+
+```sql birth_bottom3
+select * from ${birth_ranking} order by birth_count asc limit 3
+```
+
+#### 出生児数 Top 3
+
+<CardGrid>
+    {#each birth_top3 as row, i}
+    <StatCard emoji={["🥇", "🥈", "🥉"][i]} title="{row.area_name}" value={row.birth_count} />
+    {/each}
+</CardGrid>
+
+#### 出生児数 Bottom 3
+
+<CardGrid>
+    {#each birth_bottom3 as row, i}
+    <StatCard emoji={["1️⃣", "2️⃣", "3️⃣"][i]} title="{row.area_name}" value={row.birth_count} />
+    {/each}
+</CardGrid>
+
+### 出生児数マップ
+
+<TileMap data={birth_ranking} valueCol="birth_count" fmt="num0" />
+
+<details>
+<summary>データテーブルを表示</summary>
+
+<DataTable data={birth_ranking} rows=all search=true>
+    <Column id=area_name title="都道府県" />
+    <Column id=birth_count title="出生児数" fmt=num0 />
+</DataTable>
+
+</details>
 
 ---
 
-## 自然増減（出生 - 死亡）ランキング
+## 自然増減（出生 - 死亡）
 
 ```sql natural_change_ranking
 select
     area_name,
     area_code,
-    sum(case when birth_death_name = '出生児数' then raw_value else 0 end) as birth_count,
-    sum(case when birth_death_name = '死亡者数' then raw_value else 0 end) as death_count,
     sum(case when birth_death_name = '出生児数' then raw_value else 0 end)
     - sum(case when birth_death_name = '死亡者数' then raw_value else 0 end) as natural_change
 from japan_stats.mart_birth_death
-where gender_name = '男女計'
-    and nationality_name = '日本人'
+where nationality_name = '日本人'
 group by area_name, area_code
 order by natural_change desc
 ```
 
-<BarChart
-    data={natural_change_ranking}
-    x=area_name
-    y=natural_change
-    title="都道府県別 自然増減（出生 - 死亡）"
-    yAxisTitle="自然増減（人）"
-    sort=false
-    yFmt=num0
-/>
+```sql nc_top3
+select * from ${natural_change_ranking} limit 3
+```
 
-全都道府県で死亡者数が出生児数を上回り、自然減となっています。沖縄県が最も自然減が少なく、東京都が最も自然減が大きい状況です。
+```sql nc_bottom3
+select * from ${natural_change_ranking} order by natural_change asc limit 3
+```
+
+#### 自然減が少ない Top 3
+
+<CardGrid>
+    {#each nc_top3 as row, i}
+    <StatCard emoji={["🥇", "🥈", "🥉"][i]} title="{row.area_name}" value={row.natural_change} />
+    {/each}
+</CardGrid>
+
+#### 自然減が大きい Bottom 3
+
+<CardGrid>
+    {#each nc_bottom3 as row, i}
+    <StatCard emoji={["1️⃣", "2️⃣", "3️⃣"][i]} title="{row.area_name}" value={row.natural_change} />
+    {/each}
+</CardGrid>
+
+### 自然増減マップ
+
+<DivergingTileMap data={natural_change_ranking} valueCol="natural_change" fmt="num0" />
+
+<details>
+<summary>データテーブルを表示</summary>
 
 <DataTable data={natural_change_ranking} rows=all search=true>
     <Column id=area_name title="都道府県" />
-    <Column id=birth_count title="出生児数" fmt=num0 />
-    <Column id=death_count title="死亡者数" fmt=num0 />
     <Column id=natural_change title="自然増減" fmt=num0 />
 </DataTable>
 
----
-
-## 自然増減マップ
-
-<AreaMap
-    data={natural_change_ranking}
-    geoJsonUrl=/japan-info-dashboard/japan_prefectures.geojson
-    geoId=nam_ja
-    areaCol=area_name
-    value=natural_change
-    valueFmt=num0
-    title="都道府県別 自然増減（出生 - 死亡）"
-    height=500
-    legendType=scalar
-    tooltip={[{id: 'area_name', title: '都道府県'}, {id: 'birth_count', title: '出生児数', fmt: 'num0'}, {id: 'death_count', title: '死亡者数', fmt: 'num0'}, {id: 'natural_change', title: '自然増減', fmt: 'num0'}]}
-/>
-
----
-
-## 日本人 vs 外国人の比較
-
-```sql by_nationality
-select
-    nationality_name,
-    birth_death_name,
-    sum(raw_value) as total_count
-from japan_stats.mart_birth_death
-where gender_name = '男女計'
-group by nationality_name, birth_death_name
-order by nationality_name, birth_death_name
-```
-
-<BarChart
-    data={by_nationality}
-    x=nationality_name
-    y=total_count
-    series=birth_death_name
-    title="日本人 vs 外国人 出生児数・死亡者数（全国計）"
-    yAxisTitle="人数（人）"
-    type=grouped
-    yFmt=num0
-/>
-
----
-
-## 男女別 出生児数・死亡者数
-
-```sql by_gender
-select
-    area_name,
-    area_code,
-    gender_name,
-    birth_death_name,
-    raw_value
-from japan_stats.mart_birth_death
-where gender_name != '男女計'
-    and nationality_name = '日本人'
-order by area_code, gender_name, birth_death_name
-```
-
-```sql gender_summary
-select
-    gender_name,
-    birth_death_name,
-    sum(raw_value) as total_count
-from japan_stats.mart_birth_death
-where gender_name != '男女計'
-    and nationality_name = '日本人'
-group by gender_name, birth_death_name
-order by gender_name, birth_death_name
-```
-
-<BarChart
-    data={gender_summary}
-    x=gender_name
-    y=total_count
-    series=birth_death_name
-    title="男女別 出生児数・死亡者数（日本人・全国計）"
-    yAxisTitle="人数（人）"
-    type=grouped
-    yFmt=num0
-/>
+</details>
 
 ---
 

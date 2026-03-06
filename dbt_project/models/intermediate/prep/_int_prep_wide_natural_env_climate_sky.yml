@@ -1,0 +1,31 @@
+version: 2
+
+models:
+  - name: int_prep_wide_natural_env_climate_sky
+    description: >
+      自然環境 - 天候日数の横持ちモデル。快晴日数、雪日数を地域×年で横持ちにしたもの。
+      数値列にNULLあり（元データの観測欠損）。
+      2019-2020年を中心に多くの都道府県でB4104・B4107の両方が欠損。
+      一部の都道府県（千葉県等）ではB4104のみ2010年代から散発的に欠損。
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - area_code
+            - survey_year
+    columns:
+      - name: area_code
+        description: "都道府県コード"
+        tests:
+          - not_null
+      - name: area_name
+        description: "都道府県名"
+        tests:
+          - not_null
+      - name: survey_year
+        description: "調査年（整数）"
+        tests:
+          - not_null
+      - name: clear_sky_days
+        description: "B4104 快晴日数（年間）（日）。2019-2020年中心にNULLあり"
+      - name: snow_days
+        description: "B4107 雪日数（年間）（日）。2019-2020年中心にNULLあり"

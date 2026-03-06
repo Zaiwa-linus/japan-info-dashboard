@@ -3,21 +3,6 @@ title: 都道府県プロフィール
 sidebar_position: 1
 ---
 
-<style>
-    .card-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 1rem;
-        margin: 1rem 0;
-    }
-    .card {
-        background: transparent;
-        border: 1px solid #cbd5e1;
-        border-radius: 12px;
-        padding: 1.25rem 1.5rem;
-    }
-</style>
-
 都道府県を選択すると、人口・自然環境・経済の主要データを一覧できます。
 
 ```sql prefectures
@@ -53,7 +38,6 @@ select
     - sum(case when birth_death_name = '死亡者数' then raw_value else 0 end) as natural_change
 from japan_stats.mart_birth_death
 where area_name = '${inputs.selected_pref.value}'
-    and gender_name = '男女計'
     and nationality_name = '日本人'
 ```
 
@@ -71,31 +55,21 @@ where current_address_name = '${inputs.selected_pref.value}'
 
 <small>※ 人口: {pop_latest_year[0].latest_year} ／ 出生・死亡: {birth_death_data[0].latest_year} ／ 転入: {migration_data[0].latest_year}</small>
 
-<div class="card-grid">
-    <div class="card">
-        <BigValue data={pop_data} value=total_population title="👥 総人口" fmt=num0 />
-    </div>
-    <div class="card">
-        <BigValue data={birth_death_data} value=birth_count title="👶 出生数" fmt=num0 />
-    </div>
-    <div class="card">
-        <BigValue data={birth_death_data} value=death_count title="⚰️ 死亡数" fmt=num0 />
-    </div>
-    <div class="card">
-        <BigValue data={birth_death_data} value=natural_change title="📊 自然増減" fmt=num0 />
-    </div>
-    <div class="card">
-        <BigValue data={migration_data} value=total_migrants title="🚚 転入者数" fmt=num0 />
-    </div>
-</div>
+<CardGrid>
+    <StatCard emoji="👥" title="総人口" value={pop_data[0].total_population} />
+    <StatCard emoji="👶" title="出生数" value={birth_death_data[0].birth_count} />
+    <StatCard emoji="⚰️" title="死亡数" value={birth_death_data[0].death_count} />
+    <StatCard emoji="📊" title="自然増減" value={birth_death_data[0].natural_change} />
+    <StatCard emoji="🚚" title="転入者数" value={migration_data[0].total_migrants} />
+</CardGrid>
 
 ---
 
 ```sql env_data
-select *, year as env_year
+select *, survey_year as env_year
 from japan_stats.mart_natural_environment
 where area_name = '${inputs.selected_pref.value}'
-order by year desc
+order by survey_year desc
 limit 1
 ```
 
@@ -105,66 +79,34 @@ limit 1
 
 ### 🗾 土地
 
-<div class="card-grid">
-    <div class="card">
-        <BigValue data={env_data} value=total_area_incl_northern_ha title="🗾 総面積（ha）" fmt=num0 />
-    </div>
-    <div class="card">
-        <BigValue data={env_data} value=habitable_area_ha title="🏘️ 可住地面積（ha）" fmt=num0 />
-    </div>
-    <div class="card">
-        <BigValue data={env_data} value=major_lake_area_ha title="🌊 主要湖沼面積（ha）" fmt=num0 />
-    </div>
-    <div class="card">
-        <BigValue data={env_data} value=nature_conservation_area_ha title="🛡️ 自然保護地区面積（ha）" fmt=num0 />
-    </div>
-</div>
+<CardGrid>
+    <StatCard emoji="🗾" title="総面積（ha）" value={env_data[0].total_area_incl_northern_ha} />
+    <StatCard emoji="🏘️" title="可住地面積（ha）" value={env_data[0].habitable_area_ha} />
+    <StatCard emoji="🌊" title="主要湖沼面積（ha）" value={env_data[0].major_lake_area_ha} />
+    <StatCard emoji="🛡️" title="自然保護地区面積（ha）" value={env_data[0].nature_conservation_area_ha} />
+</CardGrid>
 
 ### 🌤️ 気候
 
-<div class="card-grid">
-    <div class="card">
-        <BigValue data={env_data} value=avg_temperature_celsius title="🌡️ 平均気温（℃）" fmt=num1 />
-    </div>
-    <div class="card">
-        <BigValue data={env_data} value=max_temperature_celsius title="🔥 最高気温（℃）" fmt=num1 />
-    </div>
-    <div class="card">
-        <BigValue data={env_data} value=min_temperature_celsius title="🧊 最低気温（℃）" fmt=num1 />
-    </div>
-    <div class="card">
-        <BigValue data={env_data} value=sunshine_hours title="☀️ 日照時間（h）" fmt=num0 />
-    </div>
-    <div class="card">
-        <BigValue data={env_data} value=precipitation_mm title="🌧️ 年間降水量（mm）" fmt=num0 />
-    </div>
-    <div class="card">
-        <BigValue data={env_data} value=rainy_days title="🌧️ 雨天日数" fmt=num0 />
-    </div>
-    <div class="card">
-        <BigValue data={env_data} value=avg_relative_humidity_pct title="💧 平均湿度（%）" fmt=num1 />
-    </div>
-</div>
+<CardGrid>
+    <StatCard emoji="🌡️" title="平均気温（℃）" value={env_data[0].avg_temperature_celsius} fmt="num1" />
+    <StatCard emoji="🔥" title="最高気温（℃）" value={env_data[0].max_temperature_celsius} fmt="num1" />
+    <StatCard emoji="🧊" title="最低気温（℃）" value={env_data[0].min_temperature_celsius} fmt="num1" />
+    <StatCard emoji="☀️" title="日照時間（h）" value={env_data[0].sunshine_hours} />
+    <StatCard emoji="🌧️" title="年間降水量（mm）" value={env_data[0].precipitation_mm} />
+    <StatCard emoji="🌧️" title="雨天日数" value={env_data[0].rainy_days} />
+    <StatCard emoji="💧" title="平均湿度（%）" value={env_data[0].avg_relative_humidity_pct} fmt="num1" />
+</CardGrid>
 
 ### 🏞️ 公園
 
-<div class="card-grid">
-    <div class="card">
-        <BigValue data={env_data} value=natural_park_area_ha title="🏞️ 自然公園面積（ha）" fmt=num0 />
-    </div>
-    <div class="card">
-        <BigValue data={env_data} value=prefectural_park_count title="🏛️ 都道府県立公園数" fmt=num0 />
-    </div>
-    <div class="card">
-        <BigValue data={env_data} value=prefectural_park_area_ha title="🏛️ 都道府県立公園面積（ha）" fmt=num0 />
-    </div>
-    <div class="card">
-        <BigValue data={env_data} value=national_park_area_ha title="⛰️ 国立公園面積（ha）" fmt=num0 />
-    </div>
-    <div class="card">
-        <BigValue data={env_data} value=quasi_national_park_area_ha title="🏔️ 国定公園面積（ha）" fmt=num0 />
-    </div>
-</div>
+<CardGrid>
+    <StatCard emoji="🏞️" title="自然公園面積（ha）" value={env_data[0].natural_park_area_ha} />
+    <StatCard emoji="🏛️" title="都道府県立公園数" value={env_data[0].prefectural_park_count} />
+    <StatCard emoji="🏛️" title="都道府県立公園面積（ha）" value={env_data[0].prefectural_park_area_ha} />
+    <StatCard emoji="⛰️" title="国立公園面積（ha）" value={env_data[0].national_park_area_ha} />
+    <StatCard emoji="🏔️" title="国定公園面積（ha）" value={env_data[0].quasi_national_park_area_ha} />
+</CardGrid>
 
 ---
 
@@ -182,7 +124,6 @@ select
 from japan_stats.mart_birth_death
 where area_name = '${inputs.selected_pref.value}'
     and nationality_name = '日本人'
-    and gender_name != '男女計'
 group by gender_name
 order by gender_name
 ```

@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: int_prep_wide_natural_env_climate_legacy
+    description: >
+      自然環境 - 旧気象指標の横持ちモデル。曇天日数、最深積雪、最小相対湿度を地域×年で横持ちにしたもの。
+      数値列に散発的なNULLあり（元データの観測欠損）。
+      確認済みの欠損: B4105(岡山1982), B4110(静岡1986,宮崎1986,沖縄1986)。
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - area_code
+            - survey_year
+    columns:
+      - name: area_code
+        description: "都道府県コード"
+        tests:
+          - not_null
+      - name: area_name
+        description: "都道府県名"
+        tests:
+          - not_null
+      - name: survey_year
+        description: "調査年（整数）"
+        tests:
+          - not_null
+      - name: cloudy_days
+        description: "B4105 曇天日数（年間）（日）。散発的にNULLあり"
+      - name: max_snow_depth_cm
+        description: "B4110 最深積雪（cm）。散発的にNULLあり"
+      - name: min_relative_humidity_pct
+        description: "B4112 最小相対湿度（年間）（%）"

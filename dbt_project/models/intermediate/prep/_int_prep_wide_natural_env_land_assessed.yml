@@ -1,0 +1,39 @@
+version: 2
+
+models:
+  - name: int_prep_wide_natural_env_land_assessed
+    description: "自然環境 - 評価総地積（基本分類）の横持ちモデル。総地積、田、畑、宅地を地域×年で横持ちにしたもの。"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - area_code
+            - survey_year
+    columns:
+      - name: area_code
+        description: "都道府県コード"
+        tests:
+          - not_null
+      - name: area_name
+        description: "都道府県名"
+        tests:
+          - not_null
+      - name: survey_year
+        description: "調査年（整数）"
+        tests:
+          - not_null
+      - name: assessed_land_total_m2
+        description: "B1201 評価総地積（課税対象土地）（m2）"
+        tests:
+          - not_null
+      - name: assessed_land_paddy_m2
+        description: "B120101 評価総地積（田）（m2）"
+        tests:
+          - not_null
+      - name: assessed_land_field_m2
+        description: "B120102 評価総地積（畑）（m2）"
+        tests:
+          - not_null
+      - name: assessed_land_residential_m2
+        description: "B120103 評価総地積（宅地）（m2）"
+        tests:
+          - not_null
