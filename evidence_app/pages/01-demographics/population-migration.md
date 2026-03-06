@@ -68,7 +68,7 @@ select * from ${net_migration} order by net_migration asc limit 3
 
 ### 社会増減マップ
 
-<TileMap data={net_migration} valueCol="net_migration" fmt="num0" />
+<DivergingTileMap data={net_migration} valueCol="net_migration" fmt="num0" />
 
 <details>
 <summary>データテーブルを表示</summary>

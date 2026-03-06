@@ -101,7 +101,7 @@ select * from ${natural_change_ranking} order by natural_change asc limit 3
 
 ### 自然増減マップ
 
-<TileMap data={natural_change_ranking} valueCol="natural_change" fmt="num0" />
+<DivergingTileMap data={natural_change_ranking} valueCol="natural_change" fmt="num0" />
 
 <details>
 <summary>データテーブルを表示</summary>
