@@ -15,8 +15,6 @@ select
     year,
     sum(raw_value) as total_travelers
 from japan_stats.mart_port_entry_exit
-where traveler_type_code = '100'
-    and direction_code = '100'
 group by year
 order by year
 ```
@@ -48,9 +46,7 @@ select
     port_name,
     sum(raw_value) as total_travelers
 from japan_stats.mart_port_entry_exit
-where traveler_type_code = '100'
-    and direction_code = '100'
-    and year = ${inputs.selected_year.value}
+where year = ${inputs.selected_year.value}
 group by port_name
 order by total_travelers desc
 limit 20
@@ -82,16 +78,14 @@ select
     traveler_type_name,
     sum(raw_value) as total_travelers
 from japan_stats.mart_port_entry_exit
-where traveler_type_code in ('110', '120')
-    and direction_code = '100'
+where traveler_type_code in (110, 120)
     and year = ${inputs.selected_year.value}
     and port_name in (
         select port_name
         from japan_stats.mart_port_entry_exit
-        where traveler_type_code = '100'
-            and direction_code = '100'
-            and year = ${inputs.selected_year.value}
-        order by raw_value desc
+        where year = ${inputs.selected_year.value}
+        group by port_name
+        order by sum(raw_value) desc
         limit 15
     )
 group by port_name, traveler_type_name
@@ -120,15 +114,12 @@ select
     port_name,
     sum(raw_value) as total_travelers
 from japan_stats.mart_port_entry_exit
-where traveler_type_code = '100'
-    and direction_code = '100'
-    and port_name in (
+where port_name in (
         select port_name
         from japan_stats.mart_port_entry_exit
-        where traveler_type_code = '100'
-            and direction_code = '100'
-            and year = 2024
-        order by raw_value desc
+        where year = 2024
+        group by port_name
+        order by sum(raw_value) desc
         limit 5
     )
 group by year, port_name
@@ -156,16 +147,13 @@ select
     direction_name,
     sum(raw_value) as total_travelers
 from japan_stats.mart_port_entry_exit
-where traveler_type_code = '100'
-    and direction_code in ('110', '120')
-    and year = ${inputs.selected_year.value}
+where year = ${inputs.selected_year.value}
     and port_name in (
         select port_name
         from japan_stats.mart_port_entry_exit
-        where traveler_type_code = '100'
-            and direction_code = '100'
-            and year = ${inputs.selected_year.value}
-        order by raw_value desc
+        where year = ${inputs.selected_year.value}
+        group by port_name
+        order by sum(raw_value) desc
         limit 15
     )
 group by port_name, direction_name
