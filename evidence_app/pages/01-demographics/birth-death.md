@@ -18,8 +18,7 @@ select
     sum(case when birth_death_name = '出生児数' then raw_value else 0 end)
     - sum(case when birth_death_name = '死亡者数' then raw_value else 0 end) as natural_change
 from japan_stats.mart_birth_death
-where gender_name = '男女計'
-    and nationality_name = '日本人'
+where nationality_name = '日本人'
 group by area_name, area_code
 order by area_code
 ```
@@ -29,7 +28,7 @@ order by area_code
     x=area_name
     y={["birth_count", "death_count"]}
     seriesNames={["出生児数", "死亡者数"]}
-    title="都道府県別 出生児数・死亡者数（日本人・男女計）"
+    title="都道府県別 出生児数・死亡者数（日本人）"
     yAxisTitle="人数（人）"
     type=grouped
     yFmt=num0
@@ -48,8 +47,7 @@ select
     sum(case when birth_death_name = '出生児数' then raw_value else 0 end)
     - sum(case when birth_death_name = '死亡者数' then raw_value else 0 end) as natural_change
 from japan_stats.mart_birth_death
-where gender_name = '男女計'
-    and nationality_name = '日本人'
+where nationality_name = '日本人'
 group by area_name, area_code
 order by natural_change desc
 ```
@@ -89,7 +87,6 @@ select
     birth_death_name,
     sum(raw_value) as total_count
 from japan_stats.mart_birth_death
-where gender_name = '男女計'
 group by nationality_name, birth_death_name
 order by nationality_name, birth_death_name
 ```
@@ -117,8 +114,7 @@ select
     birth_death_name,
     raw_value
 from japan_stats.mart_birth_death
-where gender_name != '男女計'
-    and nationality_name = '日本人'
+where nationality_name = '日本人'
 order by area_code, gender_name, birth_death_name
 ```
 
@@ -128,8 +124,7 @@ select
     birth_death_name,
     sum(raw_value) as total_count
 from japan_stats.mart_birth_death
-where gender_name != '男女計'
-    and nationality_name = '日本人'
+where nationality_name = '日本人'
 group by gender_name, birth_death_name
 order by gender_name, birth_death_name
 ```

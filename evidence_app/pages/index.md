@@ -70,8 +70,7 @@ select
     sum(case when birth_death_name = '出生児数' then raw_value end)
     - sum(case when birth_death_name = '死亡者数' then raw_value end) as natural_change
 from japan_stats.mart_birth_death
-where gender_name = '男女計'
-    and nationality_name = '日本人'
+where nationality_name = '日本人'
 ```
 
 ```sql migration_national

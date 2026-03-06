@@ -51,8 +51,15 @@
 
     function formatValue(val) {
         if (val == null) return '-';
-        if (fmt === 'num0') return Math.round(Number(val)).toLocaleString();
-        return Number(val).toFixed(1);
+        const n = Number(val);
+        if (fmt === 'num0') {
+            const abs = Math.abs(n);
+            if (abs >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+            if (abs >= 10_000) return Math.round(n / 1_000) + 'K';
+            if (abs >= 1_000) return (n / 1_000).toFixed(1) + 'K';
+            return Math.round(n).toLocaleString();
+        }
+        return n.toFixed(1);
     }
 
     // area_code をキーにしたデータマップを構築
@@ -98,7 +105,7 @@
         >
             <span class="tile-name">{tile.name}</span>
             <span class="tile-value">{formatValue(tile.value)}</span>
-            <div class="tooltip">{tile.fullName}: {formatValue(tile.value)}</div>
+            <div class="tooltip">{tile.fullName}: {tile.value != null ? Math.round(Number(tile.value)).toLocaleString() : '-'}</div>
         </div>
     {/each}
 </div>
