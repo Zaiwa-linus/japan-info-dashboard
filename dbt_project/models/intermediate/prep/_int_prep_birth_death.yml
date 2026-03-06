@@ -28,3 +28,5 @@ models:
         description: "値の単位"
       - name: raw_value
         description: "出生児数または死亡者数（人）"
+        tests:
+          - not_null

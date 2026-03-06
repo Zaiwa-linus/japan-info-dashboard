@@ -12,3 +12,4 @@ select
     raw_value
 from {{ ref('stg_household') }}
 where indicator_code like 'L51%'
+    and raw_value is not null

@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: int_prep_wide_natural_env_land_afforestation
+    description: "自然環境 - 人工造林面積。B1303指標を地域×年で抽出。"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - area_code
+            - survey_year
+    columns:
+      - name: area_code
+        description: "都道府県コード"
+        tests:
+          - not_null
+      - name: area_name
+        description: "都道府県名"
+        tests:
+          - not_null
+      - name: survey_year
+        description: "調査年（整数）"
+        tests:
+          - not_null
+      - name: afforestation_area_ha
+        description: "B1303 人工造林面積（ha）"
+        tests:
+          - not_null

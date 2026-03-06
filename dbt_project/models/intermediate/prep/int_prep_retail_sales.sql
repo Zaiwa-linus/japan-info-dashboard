@@ -31,3 +31,4 @@ where substring(period_raw_code, 7, 2) = substring(period_raw_code, 9, 2)
     and substring(period_raw_code, 7, 2) between '01' and '12'
     -- 販売額等のみ（増減率を除外）
     and side_item_name = '販売額等'
+    and raw_value is not null

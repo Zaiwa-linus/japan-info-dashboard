@@ -22,3 +22,5 @@ models:
         description: "年次の表示名称"
       - name: raw_value
         description: "出入国者数（人）"
+        tests:
+          - not_null

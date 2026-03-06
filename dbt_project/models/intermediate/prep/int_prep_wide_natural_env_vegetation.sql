@@ -1,5 +1,6 @@
--- 自然環境 - 植生自然度（B31xx）
--- ユニークキー: area_code, survey_year
+-- [責務] 自然環境の植生自然度指標（B31xx）を都道府県×年で横持ちに変換する
+-- [ユニークキー] area_code, survey_year
+-- [入力] stg_natural_environment
 with source as (
     select
         area_code,
@@ -10,6 +11,7 @@ with source as (
         raw_value
     from {{ ref('stg_natural_environment') }}
     where indicator_code like 'B31%'
+        and area_code <> '00000'
 )
 
 select

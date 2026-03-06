@@ -3,14 +3,8 @@
 -- [入力] int_prep_population
 
 select
-    item_code,
-    item_name,
-    population_type_code,
-    population_type_name,
     gender_code,
     gender_name,
-    population_category_code,
-    population_category_name,
     area_code,
     area_name,
     year_code,

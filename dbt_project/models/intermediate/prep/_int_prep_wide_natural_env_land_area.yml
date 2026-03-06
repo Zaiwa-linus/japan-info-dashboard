@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: int_prep_wide_natural_env_land_area
+    description: "自然環境 - 基本面積の横持ちモデル。総面積、可住地面積、自然環境保全地域面積を地域×年で横持ちにしたもの。"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - area_code
+            - survey_year
+    columns:
+      - name: area_code
+        description: "都道府県コード"
+        tests:
+          - not_null
+      - name: area_name
+        description: "都道府県名"
+        tests:
+          - not_null
+      - name: year_code
+        description: "調査年コード"
+        tests:
+          - not_null
+      - name: survey_year
+        description: "調査年（整数）"
+        tests:
+          - not_null
+      - name: total_area_excl_northern_ha
+        description: "B1101 総面積（北方地域及び竹島を除く）（ha）"
+        tests:
+          - not_null
+      - name: total_area_incl_northern_ha
+        description: "B1102 総面積（北方地域及び竹島を含む）（ha）"
+        tests:
+          - not_null
+      - name: habitable_area_ha
+        description: "B1103 可住地面積（ha）"
+        tests:
+          - not_null
+      - name: nature_conservation_area_ha
+        description: "B1108 自然環境保全地域面積（ha）"
+        tests:
+          - not_null

@@ -1,4 +1,4 @@
--- [責務] 港別出入国者データに年を付与し、集約行を除外する
+-- [責務] 港別出入国者データに年を付与し、集約行（旅行者区分「計」・出入国「総数」・港「総数」）を除外する
 -- [ユニークキー] traveler_type_code, direction_code, port_code, year
 -- [入力] stg_port_entry_exit
 
@@ -14,4 +14,6 @@ select
     raw_value
 from {{ ref('stg_port_entry_exit') }}
 where port_code != '50000'
+    and traveler_type_name != '計'
+    and direction_name != '総数'
     and raw_value is not null

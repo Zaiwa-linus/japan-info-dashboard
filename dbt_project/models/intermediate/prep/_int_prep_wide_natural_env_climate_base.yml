@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: int_prep_wide_natural_env_climate_base
+    description: >
+      自然環境 - 基本気象の横持ちモデル。気温、降水日数、日照時間、降水量、湿度を地域×年で横持ちにしたもの。
+      数値列に散発的なNULLあり（元データの観測欠損）。
+      確認済みの欠損: B4111(青森2013,神奈川2013,石川1998,高知1999,鳥取2022,岡山1982),
+      B4108(新潟2015,愛知2009,和歌山1993,広島2021,岡山1982),
+      B4109(栃木2022,富山2021,山梨2001,岡山1982),
+      B4106(栃木2022,岡山1982), B4101(岡山1982)。
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - area_code
+            - survey_year
+    columns:
+      - name: area_code
+        description: "都道府県コード"
+        tests:
+          - not_null
+      - name: area_name
+        description: "都道府県名"
+        tests:
+          - not_null
+      - name: survey_year
+        description: "調査年（整数）"
+        tests:
+          - not_null
+      - name: avg_temperature_celsius
+        description: "B4101 年平均気温（℃）。散発的にNULLあり"
+      - name: max_temperature_celsius
+        description: "B4102 最高気温（℃）"
+      - name: min_temperature_celsius
+        description: "B4103 最低気温（℃）"
+      - name: rainy_days
+        description: "B4106 降水日数（年間）（日）。散発的にNULLあり"
+      - name: sunshine_hours
+        description: "B4108 日照時間（年間）（時間）。散発的にNULLあり"
+      - name: precipitation_mm
+        description: "B4109 降水量（年間）（mm）。散発的にNULLあり"
+      - name: avg_relative_humidity_pct
+        description: "B4111 年平均相対湿度（%）。散発的にNULLあり"

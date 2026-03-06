@@ -28,3 +28,5 @@ models:
         description: "業態名（コンビニ、家電量販店、ドラッグストア、ホームセンター）"
       - name: raw_value
         description: "値（double型）"
+        tests:
+          - not_null

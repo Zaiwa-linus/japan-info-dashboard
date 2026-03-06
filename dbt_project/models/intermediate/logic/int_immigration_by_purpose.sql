@@ -1,4 +1,4 @@
--- [責務] 入国目的コードに目的カテゴリ・地域分類を付与し、集約行を除外する
+-- [責務] 入国目的コードに目的カテゴリ・地域分類を付与し、地域集約行を除外する
 -- [ユニークキー] purpose_code, nationality_code, year
 -- [入力] stg_immigration_by_purpose
 
@@ -43,6 +43,7 @@ with_category as (
                 then '日本人の配偶者等'
             when purpose_code >= '330'
                 then '定住者'
+            else '短期滞在'
         end as purpose_category,
         case
             when purpose_code in ('100', '160', '300', '330') then true
@@ -56,6 +57,7 @@ with_category as (
             when nationality_code >= '51850' and nationality_code < '51980' then '南アメリカ'
             when nationality_code >= '51980' and nationality_code < '52140' then 'オセアニア'
             when nationality_code = '52140' then 'その他'
+            else 'その他'
         end as region
     from country_level
 )

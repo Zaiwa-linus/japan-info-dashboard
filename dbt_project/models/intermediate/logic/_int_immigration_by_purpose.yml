@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: int_immigration_by_purpose
-    description: "新規入国外国人の中間モデル。地域集約行を除外し、入国目的の大分類を付与。"
+    description: "新規入国外国人の中間モデル。地域集約行を除外し、入国目的の大分類と地域分類を付与。"
     columns:
       - name: purpose_code
         description: "入国目的コード"
@@ -20,3 +20,5 @@ models:
         description: "年（整数）"
       - name: raw_value
         description: "入国者数（人）"
+        tests:
+          - not_null

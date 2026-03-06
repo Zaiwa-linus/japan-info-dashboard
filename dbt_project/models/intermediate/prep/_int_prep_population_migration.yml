@@ -20,3 +20,5 @@ models:
         description: "年次の表示名称"
       - name: raw_value
         description: "転入者数（人）"
+        tests:
+          - not_null
