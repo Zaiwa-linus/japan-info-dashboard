@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: int_prep_wide_economic_income_h27
+    description: "平成27年基準の県民所得・雇用者報酬等の都道府県別横持ちデータ（2011-2021年）。"
+    columns:
+      - name: area_code
+        description: "都道府県コード"
+      - name: area_name
+        description: "都道府県名"
+      - name: year
+        description: "調査年（整数）"
+      - name: income_total_value
+        description: "県民所得（百万円）"
+        tests:
+          - not_null
+      - name: income_per_capita_value
+        description: "1人当たり県民所得（千円）"
+      - name: compensation_value
+        description: "雇用者報酬（百万円）"
+      - name: property_income_value
+        description: "財産所得（百万円）"
+      - name: corporate_income_value
+        description: "企業所得（百万円）"

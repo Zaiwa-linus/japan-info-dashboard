@@ -33,6 +33,8 @@ sources:
             description: "指標の数値。26443種類"
       - name: "0000010103"
         description: "社会・人口統計体系 - Ｃ 経済基盤（都道府県別）"
+        meta:
+          external_location: "read_csv('../data/0000010103/0000010103.csv', all_varchar=true, auto_detect=true)"
         columns:
           - name: "観測値_code"
             description: "観測値の分類コード。1種類: 00001"

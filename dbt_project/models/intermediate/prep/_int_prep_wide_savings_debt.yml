@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: int_prep_wide_savings_debt
+    description: "二人以上世帯の年間収入・貯蓄・負債の県庁所在市別横持ちデータ（2002-2024年）。"
+    columns:
+      - name: area_code
+        description: "県庁所在市コード"
+      - name: area_name
+        description: "県庁所在市名"
+      - name: year
+        description: "調査年（整数）"
+      - name: annual_income_value
+        description: "年間収入（万円）"
+        tests:
+          - not_null
+      - name: savings_total_value
+        description: "貯蓄現在高（万円）"
+      - name: debt_total_value
+        description: "負債現在高（万円）"

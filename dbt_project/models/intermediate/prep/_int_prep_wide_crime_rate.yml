@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: int_prep_wide_crime_rate
+    description: "刑法犯の検挙率の都道府県別データ（2006-2016年）。率は合計不可のため件数モデルと分離。"
+    columns:
+      - name: area_code
+        description: "都道府県コード"
+      - name: area_name
+        description: "都道府県名"
+      - name: year
+        description: "調査年（整数）"
+      - name: arrest_rate_value
+        description: "検挙率（%）"
+        tests:
+          - not_null

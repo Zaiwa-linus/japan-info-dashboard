@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: int_prep_wide_economic_tax
+    description: "課税対象所得・納税義務者数の都道府県別横持ちデータ（1985-2024年）。"
+    columns:
+      - name: area_code
+        description: "都道府県コード"
+      - name: area_name
+        description: "都道府県名"
+      - name: year
+        description: "調査年（整数）"
+      - name: taxable_income_value
+        description: "課税対象所得（千円）"
+        tests:
+          - not_null
+      - name: taxpayer_count_value
+        description: "納税義務者数・所得割（人）"
