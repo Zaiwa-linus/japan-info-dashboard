@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: mart_crime_rate
+    description: "犯罪統計の検挙率を都道府県別に提供（2006-2016年）。率は合計不可のため件数と分離。"
+    columns:
+      - name: area_code
+        description: "都道府県コード"
+      - name: area_name
+        description: "都道府県名"
+      - name: year
+        description: "調査年（整数）"
+      - name: arrest_rate_value
+        description: "検挙率（%）"

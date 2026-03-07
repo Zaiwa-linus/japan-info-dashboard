@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: mart_consumer_price_index
+    description: "消費者物価地域差指数（10大費目＋総合）の都道府県別横持ちデータ（2013-2024年）"
+    columns:
+      - name: area_code
+        description: "都道府県コード"
+      - name: area_name
+        description: "都道府県名"
+      - name: year
+        description: "調査年（整数）"
+      - name: cpi_total_value
+        description: "総合指数"
+      - name: cpi_food_value
+        description: "食料指数"
+      - name: cpi_housing_value
+        description: "住居指数"
+      - name: cpi_utilities_value
+        description: "光熱・水道指数"
+      - name: cpi_furniture_value
+        description: "家具・家事用品指数"
+      - name: cpi_clothing_value
+        description: "被服及び履物指数"
+      - name: cpi_medical_value
+        description: "保健医療指数"
+      - name: cpi_transport_value
+        description: "交通・通信指数"
+      - name: cpi_education_value
+        description: "教育指数"
+      - name: cpi_culture_value
+        description: "教養娯楽指数"
+      - name: cpi_misc_value
+        description: "諸雑費指数"

@@ -294,6 +294,31 @@ where indicator_code = 'B4108'
         <h4>小売業態別 販売動向</h4>
         <p>コンビニ・家電・ドラッグストア・ホームセンターの月次販売額</p>
     </a>
+    <a class="nav-card" href="/japan-info-dashboard/03-economy/consumer-price-index">
+        <h4>消費者物価地域差指数</h4>
+        <p>都道府県別の10大費目＋総合の消費者物価指数</p>
+    </a>
+    <a class="nav-card" href="/japan-info-dashboard/03-economy/gdp-income">
+        <h4>県内総生産・県民所得</h4>
+        <p>都道府県別GDP（産業別）と県民所得の推移</p>
+    </a>
+    <a class="nav-card" href="/japan-info-dashboard/03-economy/tax">
+        <h4>課税対象所得・納税義務者数</h4>
+        <p>都道府県別の課税対象所得と納税義務者数の長期推移</p>
+    </a>
+    <a class="nav-card" href="/japan-info-dashboard/03-economy/savings-debt">
+        <h4>貯蓄・負債（二人以上世帯）</h4>
+        <p>県庁所在市別の年間収入・貯蓄・負債の推移</p>
+    </a>
+</div>
+
+### 安全
+
+<div class="nav-grid">
+    <a class="nav-card" href="/japan-info-dashboard/05-safety/crime">
+        <h4>犯罪統計</h4>
+        <p>都道府県別の認知件数・検挙件数・検挙率の推移</p>
+    </a>
 </div>
 
 ### 自然環境

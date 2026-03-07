@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: mart_economic_income
+    description: "平成27年基準の県民所得を都道府県別に提供（2011-2021年度）。総額・一人当たり・雇用者報酬・財産所得・企業所得。"
+    columns:
+      - name: area_code
+        description: "都道府県コード"
+      - name: area_name
+        description: "都道府県名"
+      - name: year
+        description: "年度（整数）"
+      - name: income_total_value
+        description: "県民所得（百万円）"
+      - name: income_per_capita_value
+        description: "一人当たり県民所得（千円）"
+      - name: compensation_value
+        description: "雇用者報酬（百万円）"
+      - name: property_income_value
+        description: "財産所得（百万円）"
+      - name: corporate_income_value
+        description: "企業所得（百万円）"

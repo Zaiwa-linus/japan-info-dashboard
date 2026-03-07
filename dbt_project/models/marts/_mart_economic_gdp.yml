@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: mart_economic_gdp
+    description: "平成27年基準の県内総生産（GDP）を都道府県別に提供（2011-2021年度）。総額＋第1/2/3次産業別。単位：百万円。"
+    columns:
+      - name: area_code
+        description: "都道府県コード"
+      - name: area_name
+        description: "都道府県名"
+      - name: year
+        description: "年度（整数）"
+      - name: gdp_total_value
+        description: "県内総生産（百万円）"
+      - name: gdp_primary_value
+        description: "第1次産業（百万円）"
+      - name: gdp_secondary_value
+        description: "第2次産業（百万円）"
+      - name: gdp_tertiary_value
+        description: "第3次産業（百万円）"
