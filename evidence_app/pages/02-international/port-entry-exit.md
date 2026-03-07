@@ -39,7 +39,7 @@ order by year
 select distinct year from japan_stats.mart_port_entry_exit order by year desc
 ```
 
-<Dropdown data={years} name=selected_year value=year defaultValue={2024} />
+<Dropdown data={years} name=selected_year value=year defaultValue={years[0].year} />
 
 ```sql top_ports
 select

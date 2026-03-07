@@ -294,7 +294,7 @@ where indicator_code = 'B4108'
         <h4>小売業態別 販売動向</h4>
         <p>コンビニ・家電・ドラッグストア・ホームセンターの月次販売額</p>
     </a>
-    <a class="nav-card" href="/japan-info-dashboard/03-economy/consumer-price-index">
+    <a class="nav-card" href="/japan-info-dashboard/03-economy/cpi">
         <h4>消費者物価地域差指数</h4>
         <p>都道府県別の10大費目＋総合の消費者物価指数</p>
     </a>

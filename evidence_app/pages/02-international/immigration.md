@@ -44,7 +44,7 @@ select distinct year from japan_stats.mart_immigration_by_purpose order by year 
 select distinct region from japan_stats.mart_immigration_by_purpose where region is not null order by region
 ```
 
-<Dropdown data={years} name=selected_year value=year defaultValue={2024} />
+<Dropdown data={years} name=selected_year value=year defaultValue={years[0].year} />
 <Dropdown data={regions} name=selected_region value=region>
     <DropdownOption valueLabel="すべての地域" value="%" />
 </Dropdown>
